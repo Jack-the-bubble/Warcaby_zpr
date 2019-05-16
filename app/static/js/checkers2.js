@@ -416,13 +416,13 @@ window.onload = function() {
                   for (k of pieces) {
                       if (k.position[0] == i && k.position[1] == j) {
                           if (k.king) {
-                              if(k.player == player1) ret.push(2)//ret[i*8+j] = '2';
-                              else if (k.player == player2) ret.push(-2)//ret[i*8+j] = '-2';
+                              if(k.player == 1) ret.push(2)//ret[i*8+j] = '2';
+                              else if (k.player == 2) ret.push(-2)//ret[i*8+j] = '-2';
                               // console.log(ret[i*8+j]);
                           }
                           else {
-                              if(k.player == player1) ret.push(1)//ret[i*8+j] = '1';
-                              else if (k.player == player2) ret.push(-1)//ret[i*8+j] = '-1';
+                              if(k.player == 1) ret.push(1)//ret[i*8+j] = '1';
+                              else if (k.player == 2) ret.push(-1)//ret[i*8+j] = '-1';
                               // console.log(ret[2]);
                           }
                           found = true;
@@ -470,9 +470,10 @@ window.onload = function() {
     Board.clear();
   });
   
-  var sendMove = function(whos_turn, piece, tile){
+  var sendMove = function(whos_turn, piece, tile, all_board){
   		console.log("sending a message about a move");
 		var data = {
+		        board: all_board,
   				player: whos_turn,
   				p_pos: piece,
   				t_pos: tile
@@ -523,7 +524,8 @@ window.onload = function() {
           if(!piece.canJumpAny()) {
             piece.move(tile);
             send_board = Board.str_board();
-            console.log("oto board"+send_board);
+            console.log("oto board "+send_board);
+              sendMove(piece.player, piece.position, tile.position, send_board);
 //				wyslac wiadomosc o ruchu            
 //				sendMove(piece.player, piece.position, tile.position);               
             
