@@ -404,7 +404,8 @@ window.onload = function() {
 
       // Possibly helpful for communication with back-end.
       str_board: function () {
-          ret = []
+          var ret = []
+
           for (i in this.board) {
               for (j in this.board[i]) {
 
@@ -415,24 +416,28 @@ window.onload = function() {
                   for (k of pieces) {
                       if (k.position[0] == i && k.position[1] == j) {
                           if (k.king) {
-                              if(k.player == player1) ret[i*8+j] = '2';
-                              else if (k.player == player2) ret[i*8+j] += '-2';
+                              if(k.player == player1) ret.push(2)//ret[i*8+j] = '2';
+                              else if (k.player == player2) ret.push(-2)//ret[i*8+j] = '-2';
+                              // console.log(ret[i*8+j]);
                           }
                           else {
-                              if(k.player == player1) ret[i*8+j] = '1';
-                              else if (k.player == player2) ret[i*8+j] += '-1';]
+                              if(k.player == player1) ret.push(1)//ret[i*8+j] = '1';
+                              else if (k.player == player2) ret.push(-1)//ret[i*8+j] = '-1';
+                              // console.log(ret[2]);
                           }
                           found = true;
                           break;
                       }
                   }
-                  if (!found) ret[i*8+j]= '0'
+                  if (!found) ret.push(0);//ret[i*8+j]= '0'
+                  // console.log(ret);
               }
           }
+          // console.log("element"+ret[1]);
           return ret
       }
   }
-}
+// }
   //initialize the board
   Board.initalize();
 
@@ -497,6 +502,7 @@ window.onload = function() {
           	console.log("jump - moving piece");
             piece.move(tile);
             console.log("moved - checking for continuous capture");
+
 //				wyslac wiadomosc o ruchu 
 //				sendMove(piece.player, piece.position, tile.position);           
             
@@ -516,7 +522,8 @@ window.onload = function() {
         } else if(inRange == 'regular' && !Board.jumpexist) {
           if(!piece.canJumpAny()) {
             piece.move(tile);
-            
+            send_board = Board.str_board();
+            console.log("oto board"+send_board);
 //				wyslac wiadomosc o ruchu            
 //				sendMove(piece.player, piece.position, tile.position);               
             
