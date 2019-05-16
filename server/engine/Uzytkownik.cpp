@@ -6,8 +6,6 @@ const int size_ = 8;
 Uzytkownik::Uzytkownik(int id)
 {
 	gracz_id = id;
-	zbicie = 0;
-
 }
 
 
@@ -59,6 +57,17 @@ bool Uzytkownik::wybierzPionek()
 		this->wybrano = true;
 		return wybrano;
 	}
+
+	if (boardCopy[w][k] == 2*gracz_id)   //wybranie damki
+	{
+		this->k_ = k;
+		this->w_ = w;
+		this->wybrano = true;
+		this->damka = true;
+		return wybrano;
+	}
+
+
 	this->wybrano = false;
 	return wybrano;
 }
@@ -136,12 +145,11 @@ Sprawdza ile jest mozliwych ruchow dla pionka
 int Uzytkownik::possibleMoves()
 {
 	int moves = 0;
-	zbicie = 0;
-
 
 	moves = bicie(0, w_, k_);
+	if (moves > 0) biciePossible = true;
 	   
-	if (moves == 0)  //jesli nie ma bicia
+	if (moves == 0 && biciePossible == false)  //jesli nie ma bicia
 	{
 		if (k_ > 0)
 		{
@@ -183,9 +191,6 @@ int Uzytkownik::bicie(int moves, int wiersz, int kol)
 				next_w[moves] = wiersz + gracz_id * 2;
 				next_k[moves] = kol -  2;
 				++moves;
-		//		doZbicia_k[zbicie] = kol - 1;
-		//		doZbicia_w[zbicie] = 
-		//		++zbicie;
 
 				do
 				{
@@ -261,19 +266,114 @@ int Uzytkownik::bicie(int moves, int wiersz, int kol)
 	return moves;
 }
 
+
+int Uzytkownik::damkaPossibleMoves()
+{
+	int moves = 0;
+	//moves = damkaBicie(0, w_, k_);
+	if (moves > 0) biciePossible = true;
+
+	if (moves == 0 && biciePossible == false)  //jesli nie ma bicia
+	{
+		if (k_ > 0)
+		{
+			for (int i = 1; (((w_ + gracz_id * i) >= 0) && ((w_ + gracz_id * i) < 8) && (k_ - i >= 0) && (boardCopy[w_ + gracz_id * i][k_ - i] == 0)); ++i)
+			{
+				if (boardCopy[w_ + gracz_id * i][k_ - i] == 0)
+				{
+					next_w[moves] = w_ + gracz_id * i;
+					next_k[moves] = k_ - i;
+					++moves;
+				}
+			}
+		}
+		if (k_ < 7)
+		{
+
+			for (int i = 1; (((w_ + gracz_id * i) >= 0) && ((w_ + gracz_id * i) < 8) && (k_ + i < 8) && (boardCopy[w_ + gracz_id * i][k_ + i] == 0)); ++i)
+			{
+				if (boardCopy[w_ + gracz_id * i][k_ + i] == 0)
+				{
+					next_w[moves] = w_ + gracz_id * i;
+					next_k[moves] = k_ + i;
+					++moves;
+				}
+			}
+
+		}
+
+
+	}
+
+	return moves;
+}
+
 void Uzytkownik::update(const int plansza[8][8])
 {
 	moves_ = 0;
+	biciePossible = false;
+	damka = false;
+
 
 	for (int i = 0; i < size_; ++i)
 	{
 		for (int j = 0; j < size_; ++j)
 			boardCopy[i][j] = plansza[i][j];
 	}
+
+	//sprawdzenie czy jest przymus bicia
+	for (int i = 0; i < size_; ++i)
+	{
+		for (int j = 0; j < size_; ++j)
+		{
+			if (boardCopy[i][j] == gracz_id)
+			{
+				this->k_ = j;
+				this->w_ = i;
+				possibleMoves();
+
+				//TODO tu dodac co jak mamy damke
+
+				//przywrocenie planszy
+				for (int i = 0; i < size_; ++i)
+				{
+					for (int j = 0; j < size_; ++j)
+						boardCopy[i][j] = plansza[i][j];
+				}
+
+				moves_ = 0;
+
+			}
+		}
+
+	}
+
+	moves_ = 0;
 	do 
 	{
 		while (wybierzPionek() == false) {}
-		this->moves_ = possibleMoves();
+		if (!damka)
+		{  
+			for (int i = 0; i < size_; ++i)
+			{
+				for (int j = 0; j < size_; ++j)
+				{
+					if (boardCopy[i][j] == 2) boardCopy[i][j] = 1;
+					if (boardCopy[i][j] == -2) boardCopy[i][j] = -1;
+				}
+
+			}
+
+			this->moves_ = possibleMoves();			
+		}
+		if (damka)
+		{
+			this->moves_ = damkaPossibleMoves();
+			damka = false;
+		}
+
+		//TODO
+		 //tu ruch dla damki
 	} while (moves_ == 0);
 
 	for (int i = 0; i < moves_;++i)
@@ -282,6 +382,8 @@ void Uzytkownik::update(const int plansza[8][8])
 	}
 
 	while (makeMove() == false) {}
+
+	biciePossible = false;
 	return;
 	//tutaj juz w tablicach next_w oraz next_k w komorkach od 0 do moves_-1 sa dostepne ruchy
 	//teraz powinny sie wyswietlic uzytkownikowi i powinien on moc wybrac 
@@ -295,4 +397,9 @@ int Uzytkownik::getK()
 int Uzytkownik::getW()
 {
 	return  w_;
+}
+
+bool Uzytkownik::czyDamka()
+{
+	return this-> damka;
 }
