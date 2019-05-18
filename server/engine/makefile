@@ -24,6 +24,69 @@
 
 #for class_test
 ##########################
+#PYTHON_VERSION =3.6m
+#PYTHON_VER=3
+#PYTHON_INCLUDE = /usr/include/python$(PYTHON_VERSION)
+## location of the Boost Python include files and library
+#BOOST_INC = /usr/include
+#BOOST_LIB = /usr/lib
+## compile mesh classes
+#TARGET = class_test
+#$(TARGET).so: clean $(TARGET).o
+#	g++ -shared -Wl,--export-dynamic $(TARGET).o -L$(BOOST_LIB) -lboost_python$(PYTHON_VER) -L/usr/lib/python$(PYTHON_VERSION)/config -lpython$(PYTHON_VERSION) -o $(TARGET).so
+#$(TARGET).o:
+#	g++ -I$(PYTHON_INCLUDE) -I$(BOOST_INC) -fPIC -c $(TARGET).cpp -o $(TARGET).o
+#
+#clean:
+#	@rm -f *.o
+#	@rm -f *.so
+#	@rm -f *.elf
+##########################
+
+#for deriv_test
+##########################
+#PYTHON_VERSION =3.6m
+#PYTHON_VER=3
+#PYTHON_INCLUDE = /usr/include/python$(PYTHON_VERSION)
+## location of the Boost Python include files and library
+#BOOST_INC = /usr/include
+#BOOST_LIB = /usr/lib
+## compile mesh classes
+#TARGET = deriv_test
+#$(TARGET).so: clean $(TARGET).o
+#	g++ -shared -Wl,--export-dynamic $(TARGET).o -L$(BOOST_LIB) -lboost_python$(PYTHON_VER) -L/usr/lib/python$(PYTHON_VERSION)/config -lpython$(PYTHON_VERSION) -o $(TARGET).so
+#$(TARGET).o:
+#	g++ -I$(PYTHON_INCLUDE) -I$(BOOST_INC) -fPIC -c $(TARGET).cpp -o $(TARGET).o
+#
+#clean:
+#	@rm -f *.o
+#	@rm -f *.so
+#	@rm -f *.elf
+##########################
+
+#for virtual_poly
+##########################
+#PYTHON_VERSION =3.6m
+#PYTHON_VER=3
+#PYTHON_INCLUDE = /usr/include/python$(PYTHON_VERSION)
+## location of the Boost Python include files and library
+#BOOST_INC = /usr/include
+#BOOST_LIB = /usr/lib
+## compile mesh classes
+#TARGET = virtual_poly
+#$(TARGET).so: clean $(TARGET).o
+#	g++ -shared -Wl,--export-dynamic $(TARGET).o -L$(BOOST_LIB) -lboost_python$(PYTHON_VER) -L/usr/lib/python$(PYTHON_VERSION)/config -lpython$(PYTHON_VERSION) -o $(TARGET).so
+#$(TARGET).o:
+#	g++ -I$(PYTHON_INCLUDE) -I$(BOOST_INC) -fPIC -c $(TARGET).cpp -o $(TARGET).o
+#
+#clean:
+#	@rm -f *.o
+#	@rm -f *.so
+#	@rm -f *.elf
+##########################
+
+#for Klient
+##########################
 PYTHON_VERSION =3.6m
 PYTHON_VER=3
 PYTHON_INCLUDE = /usr/include/python$(PYTHON_VERSION)
@@ -31,7 +94,7 @@ PYTHON_INCLUDE = /usr/include/python$(PYTHON_VERSION)
 BOOST_INC = /usr/include
 BOOST_LIB = /usr/lib
 # compile mesh classes
-TARGET = class_test
+TARGET = Klient
 $(TARGET).so: clean $(TARGET).o
 	g++ -shared -Wl,--export-dynamic $(TARGET).o -L$(BOOST_LIB) -lboost_python$(PYTHON_VER) -L/usr/lib/python$(PYTHON_VERSION)/config -lpython$(PYTHON_VERSION) -o $(TARGET).so
 $(TARGET).o:
@@ -41,4 +104,25 @@ clean:
 	@rm -f *.o
 	@rm -f *.so
 	@rm -f *.elf
+##########################
+
+#for deriv_test_list
+##########################
+#PYTHON_VERSION =3.6m
+#PYTHON_VER=3
+#PYTHON_INCLUDE = /usr/include/python$(PYTHON_VERSION)
+## location of the Boost Python include files and library
+#BOOST_INC = /usr/include
+#BOOST_LIB = /usr/lib
+## compile mesh classes
+#TARGET = deriv_list_test
+#$(TARGET).so: clean $(TARGET).o
+#	g++ -shared -Wl,--export-dynamic $(TARGET).o -L$(BOOST_LIB) -lboost_python$(PYTHON_VER) -L/usr/lib/python$(PYTHON_VERSION)/config -lpython$(PYTHON_VERSION) -o $(TARGET).so
+#$(TARGET).o:
+#	g++ -I$(PYTHON_INCLUDE) -I$(BOOST_INC) -fPIC -c $(TARGET).cpp -o $(TARGET).o
+#
+#clean:
+#	@rm -f *.o
+#	@rm -f *.so
+#	@rm -f *.elf
 ##########################

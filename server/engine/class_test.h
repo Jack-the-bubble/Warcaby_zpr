@@ -8,6 +8,7 @@
 #include <boost/python.hpp>
 
 struct World{
+	World(std::string msg);
 	void set(std::string msg);
 	std::string greet();
 	std::string msg;
@@ -17,7 +18,7 @@ struct World{
 using namespace boost::python;
 
 BOOST_PYTHON_MODULE(class_test){
-		class_<World>("World")
+		class_<World>("World", init<std::string>())
 				.def("greet", &World::greet)
 				.def("set", &World::set)
 		;

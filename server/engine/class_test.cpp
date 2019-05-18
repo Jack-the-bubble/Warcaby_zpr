@@ -4,6 +4,7 @@
 
 #include "class_test.h"
 
+World::World(std::string msg) :msg(msg){}
 
 void World::set(std::string msg) {
 	this->msg = msg;
