@@ -488,7 +488,7 @@ window.onload = function() {
   
   socket.on("moveResp", function (data) {console.log(data)})
 
-  socket.on("init", function (data) {console.log(data); connectionID=data})
+  socket.on("init", function (data) {console.log("my id = "+data); connectionID=data})
 
   //move piece when tile is clicked
   $('.tile').on("click", function () {

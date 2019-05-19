@@ -10,16 +10,18 @@
 			var socket = io.connect('http://' + document.domain + ':' + location.port);
 
 				socket.on('connect', function() {
-        		socket.emit('con', {data: socket.id});
-        		console.log("Connecting "+socket.id)
-
-
+				window.my_id = socket.id
+                    socket.emit('con', {data:window.my_id})
+        		// socket.emit('con', {data: socket.id});
+        		// console.log("Connecting "+socket.id);
     		});
-				socket.on('disconnect', function () {
-				    console.log("disconnecting")
-				    socket.emit('dis', {data: socket.id});
+				 socket.on('disconnect', function () {
+				     console.log("disconnecting "+window.my_id)
+                     socket.emit('dis', {data: window.my_id})
+				     // console.log("disconnecting "+socket.id);
+				     // socket.emit('dis', {data: socket.id});
 
-                });
+                 });
 		</script>	
 	</head>
 
