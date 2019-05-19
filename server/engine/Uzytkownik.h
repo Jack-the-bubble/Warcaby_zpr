@@ -1,5 +1,7 @@
 #pragma once
 #include "Gracz.h"
+#include <boost/python.hpp>
+
 class Uzytkownik :
 	public Gracz
 {
@@ -29,4 +31,3 @@ private:
 	bool biciePossible;
 	bool damka = false;
 };
-

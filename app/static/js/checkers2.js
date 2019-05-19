@@ -1,4 +1,6 @@
 window.onload = function() {
+
+  var connectionID = -1
   //The initial setup
   var gameBoard = [
     [  0,  1,  0,  1,  0,  1,  0,  1 ],
@@ -239,8 +241,11 @@ window.onload = function() {
       //reset position so it doesn't get picked up by the for loop in the canOpponentJump method
       this.position = [];
       var playerWon = Board.checkifAnybodyWon();
-      if(playerWon) {
-        $('#winner').html("Player "+playerWon+" has won!");
+      if(playerWon == 1) {
+        $('#winner').html("Player "+2+" has won!");
+      }
+      else if (playerWon == 2){
+          $('#winner').html("Player "+1+" has won!");
       }
     }
   }
@@ -483,6 +488,8 @@ window.onload = function() {
   
   socket.on("moveResp", function (data) {console.log(data)})
 
+  socket.on("init", function (data) {console.log(data); connectionID=data})
+
   //move piece when tile is clicked
   $('.tile').on("click", function () {
     //make sure a piece is selected
@@ -504,12 +511,16 @@ window.onload = function() {
             piece.move(tile);
             console.log("moved - checking for continuous capture");
 
+              send_board = Board.str_board();
+              console.log("oto board "+send_board);
+              sendMove(piece.player, piece.position, tile.position, send_board);
 //				wyslac wiadomosc o ruchu 
 //				sendMove(piece.player, piece.position, tile.position);           
             
             if(piece.can_jump_any_regular()) {
                // Board.changePlayerTurn(); //change back to original since another turn can be made
                piece.element.addClass('selected');
+
                // exist continuous jump, you are not allowed to de-select this piece or select other pieces
                Board.continuousjump = true;
             } else {

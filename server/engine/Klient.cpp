@@ -1,4 +1,5 @@
 #include "Klient.h"
+#include <iostream>
 
 
 
@@ -12,10 +13,11 @@ Klient::~Klient()
 {
 }
 
-void Klient::update(const int plansza[8][8])
+void Klient::update(/*const int plansza[8][8]*/)
 {
 	//TODO
-	//Przeslanie aktualnej planszy do klienta 
+	std::cout<<"hey"<<std::endl;
+	//Przeslanie aktualnej planszy do klienta
 	//przeslanie gotowej planszy przez klienta
 }
 

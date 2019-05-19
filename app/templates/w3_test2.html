@@ -8,10 +8,18 @@
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			var socket = io.connect('http://' + document.domain + ':' + location.port);
-				console.log("Connecting")
+
 				socket.on('connect', function() {
-        		socket.emit('myMsg', {data: 'I\'m connected!'});
+        		socket.emit('con', {data: socket.id});
+        		console.log("Connecting "+socket.id)
+
+
     		});
+				socket.on('disconnect', function () {
+				    console.log("disconnecting")
+				    socket.emit('dis', {data: socket.id});
+
+                });
 		</script>	
 	</head>
 
@@ -45,10 +53,10 @@
 				<h2>Game statistics</h2>
 				<div class="wrapper">
 					<div id="player1">
-						<h3>Player 1 (Top)</h3>
+						<h3>Player 2 (Top)</h3>
 					</div>
 					<div id="player2">
-						<h3>Player 3 (Bottom)</h3>					
+						<h3>Player 1 (Bottom)</h3>
 					</div>				
 				</div>			
 				<div class="clearfix"></div>

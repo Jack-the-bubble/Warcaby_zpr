@@ -22,7 +22,7 @@ Plansza::Plansza()
 		if (i % 2 == 1) plansza[i][1] = plansza[i][3] = plansza[i][5] = plansza[i][7] = -1;
 		if (i % 2 == 0) plansza[i][0] = plansza[i][2] = plansza[i][4] = plansza[i][6] = -1;
 	}
-	pionkiBia³e = pionkiCzarne = 12;
+	pionkiBiale = pionkiCzarne = 12;
 }
 
 
@@ -71,7 +71,7 @@ int Plansza::bicie(int graczID, int w_prev, int k_prev, int w_next, int k_next)
 			{
 				plansza[w_prev + graczID * 1][k_prev + 1] = 0;
 				if (graczID == 1) pionkiCzarne--;
-				else if (graczID == -1) pionkiBia³e--;
+				else if (graczID == -1) pionkiBiale--;
 				return 1;
 			}
 		}
@@ -81,14 +81,14 @@ int Plansza::bicie(int graczID, int w_prev, int k_prev, int w_next, int k_next)
 			{
 				plansza[w_prev + graczID * 1][k_prev - 1] = 0;
 				if (graczID == 1) pionkiCzarne--;
-				else if (graczID == -1) pionkiBia³e--;
+				else if (graczID == -1) pionkiBiale--;
 				return 1;
 			}
 				
 		}
 
 	}
-	if (graczID * (w_prev - w_next) == 2)  //tu zbija przy pojedynczym biciu do ty³u
+	if (graczID * (w_prev - w_next) == 2)  //tu zbija przy pojedynczym biciu do tyï¿½u
 	{
 		if (k_next > k_prev)
 		{
@@ -96,7 +96,7 @@ int Plansza::bicie(int graczID, int w_prev, int k_prev, int w_next, int k_next)
 			{
 				plansza[w_prev - graczID * 1][k_prev + 1] = 0;
 				if (graczID == 1) pionkiCzarne--;
-				else if (graczID == -1) pionkiBia³e--;
+				else if (graczID == -1) pionkiBiale--;
 				return 1;
 			}
 		}
@@ -106,7 +106,7 @@ int Plansza::bicie(int graczID, int w_prev, int k_prev, int w_next, int k_next)
 			{
 				plansza[w_prev - graczID * 1][k_prev - 1] = 0;
 				if (graczID == 1) pionkiCzarne--;
-				else if (graczID == -1) pionkiBia³e--;
+				else if (graczID == -1) pionkiBiale--;
 				return 1;
 			}
 		}
@@ -119,7 +119,7 @@ int Plansza::bicie(int graczID, int w_prev, int k_prev, int w_next, int k_next)
 			{
 				plansza[w_next - graczID * 1][k_next + 1] = 0;
 				if (graczID == 1) pionkiCzarne--;
-				else if (graczID == -1) pionkiBia³e--;
+				else if (graczID == -1) pionkiBiale--;
 				if( bicie(graczID, w_prev, k_prev, w_next - graczID * 2, k_next + 2) == 2) plansza[w_next - graczID * 1][k_next + 1] = -graczID ;
 				pom++;
 			}
@@ -128,7 +128,7 @@ int Plansza::bicie(int graczID, int w_prev, int k_prev, int w_next, int k_next)
 			{
 				plansza[w_next - graczID * 1][k_next - 1] = 0;
 				if (graczID == 1) pionkiCzarne--;
-				else if (graczID == -1) pionkiBia³e--;
+				else if (graczID == -1) pionkiBiale--;
 				if(bicie(graczID, w_prev, k_prev, w_next - graczID * 2, k_next - 2) == 2) plansza[w_next - graczID * 1][k_next - 1] = -graczID;
 				pom++;
 			}
@@ -140,7 +140,7 @@ int Plansza::bicie(int graczID, int w_prev, int k_prev, int w_next, int k_next)
 			{
 				plansza[w_next + graczID * 1][k_next + 1] = 0;
 				if (graczID == 1) pionkiCzarne--;
-				else if (graczID == -1) pionkiBia³e--;
+				else if (graczID == -1) pionkiBiale--;
 				if(bicie(graczID, w_prev, k_prev, w_next + graczID * 2, k_next + 2) == 2) plansza[w_next + graczID * 1][k_next + 1] = -graczID;
 				pom++;
 			}
@@ -148,7 +148,7 @@ int Plansza::bicie(int graczID, int w_prev, int k_prev, int w_next, int k_next)
 			{
 				plansza[w_next + graczID * 1][k_next - 1] = 0;
 				if (graczID == 1) pionkiCzarne--;
-				else if (graczID == -1) pionkiBia³e--;
+				else if (graczID == -1) pionkiBiale--;
 				if( bicie(graczID, w_prev, k_prev, w_next + graczID * 2, k_next - 2) == 2) plansza[w_next + graczID * 1][k_next - 1] = -graczID;
 				pom++;
 			}
@@ -163,7 +163,7 @@ int Plansza::bicie(int graczID, int w_prev, int k_prev, int w_next, int k_next)
 
 int Plansza::getPionkiBiale()
 {
-	return this->pionkiBia³e;
+	return this->pionkiBiale;
 }
 int Plansza::getPionkiCzarne()
 {

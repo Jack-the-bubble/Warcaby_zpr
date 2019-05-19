@@ -1,4 +1,4 @@
-// Warcaby.cpp : Ten plik zawiera funkcjê „main”. W nim rozpoczyna siê i koñczy wykonywanie programu.
+// Warcaby.cpp : Ten plik zawiera funkcjï¿½ ï¿½mainï¿½. W nim rozpoczyna siï¿½ i koï¿½czy wykonywanie programu.
 /**
 	ZPR projekt
 	Warcaby.cpp

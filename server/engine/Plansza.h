@@ -14,7 +14,7 @@ public:
 	int plansza[8][8];
 private:
 
-	int pionkiBia³e;   //pionki gracza o ID = 1 
+	int pionkiBiale;   //pionki gracza o ID = 1
 	int pionkiCzarne;  //pionki gracza o ID = -1
 	const int kolumny = 8;
 	bool damkaDone = false;

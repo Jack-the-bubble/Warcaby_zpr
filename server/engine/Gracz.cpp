@@ -7,6 +7,6 @@ Gracz::Gracz()
 }
 
 
-Gracz::~Gracz()
+virtual Gracz::~Gracz()
 {
 }

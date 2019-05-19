@@ -20,12 +20,17 @@ def sessions():
 
 @socketio.on('moveMsg')
 def move_on_server(data):
-	emit('moveResp', 'received')
+
 	events.handle_move(data)
 	
 	
-@socketio.on('myMsg')
-def send_response(message):
-	emit('resp', 'data')
+@socketio.on('con')
+def send_response(data):
+	events.initialize_player(data)
 
+	# emit('resp', 'data')
+
+@socketio.on('dis')
+def cut_player(data):
+	events.delete_player(data)
 	
