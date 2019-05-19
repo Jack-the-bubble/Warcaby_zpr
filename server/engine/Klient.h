@@ -12,7 +12,7 @@ public:
 		return this->get_override("getID")();
 	}
 
-	virtual void update(/*const int plansza[8][8]*/){
+	virtual void update(const int plansza[8][8]){
 		this->get_override("update")();
 	}
 };
@@ -23,8 +23,9 @@ class Klient :
 public:
 	Klient(int);
 	~Klient();
-	virtual void update(/*const int plansza[8][8]*/);
+	virtual void update(const int plansza[8][8]);
 	virtual int getID();
+	void convert_and_update(list board);
 	int planszaCopy[8][8];
 	bool ready = false;
 	int graczID;
@@ -41,5 +42,6 @@ BOOST_PYTHON_MODULE(Klient){
 				.def("getPrevW", &Gracz::getPrevW)
 		;
 
-		class_<Klient, bases<Gracz> >("Klient", init<int>());
+		class_<Klient, bases<Gracz> >("Klient", init<int>())
+		        .def("convert_and_update", &Klient::convert_and_update);
 }

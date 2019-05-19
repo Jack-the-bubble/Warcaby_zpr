@@ -9,7 +9,7 @@ public:
 	virtual int getPrevW() { return 0; };	//to usuniemy jak bedzie komputer
 	virtual int getK() { return 0; };	//to usuniemy jak bedzie komputer
 	virtual int getW() { return 0; };	//to usuniemy jak bedzie komputer
-	virtual void update (/*const int plansza[8][8]*/) = 0;
+	virtual void update (const int plansza[8][8]) = 0;
 	int boardCopy[8][8];
 };
 

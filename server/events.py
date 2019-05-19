@@ -51,7 +51,7 @@ def handle_move(data, id):
     # print(int_board)
     # k = Klient.Klient(5)
     print(int(clients[socketID.index(id)].getID()))
-    
+    clients[socketID.index(id)].convert_and_update(int_board)
     # pom = int(clients[socketID.index(id)].getID())
     # emit('moveResp', {data: pom})
 
