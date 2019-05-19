@@ -32,7 +32,7 @@ def send_response(data):
 	id = request.sid
 	# print(id)
 	# print("\n\n\n\n\n\n\n")
-	emit('moveResp', id)
+	# emit('moveResp', id)
 
 	events.initialize_player(id)
 

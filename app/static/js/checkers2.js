@@ -15,7 +15,7 @@ window.onload = function() {
   //arrays to store the instances
   var pieces = [];
   var tiles = [];
-
+  var computer = false;
   //distance formula
   var dist = function (x1, y1, x2, y2) {
     return Math.sqrt(Math.pow((x1-x2),2)+Math.pow((y1-y2),2));
@@ -45,7 +45,9 @@ window.onload = function() {
     //moves the piece
     this.move = function (tile) {
       this.element.removeClass('selected');
-      if(!Board.isValidPlacetoMove(tile.position[0], tile.position[1])) return false;
+      if(!Board.isValidPlacetoMove(tile.position[0], tile.position[1])) {console.log("wrong move "+tile.position[0]+" "+tile.position[1]);
+        return false;
+      }
       //make sure piece doesn't go backwards if it's not a king
 /*      if(this.player == 1 && this.king == false) {
         if(tile.position[0] < this.position[0]){ 
@@ -56,6 +58,7 @@ window.onload = function() {
          	return false;
 	  		}
       }*/
+        console.log("moving piece from server")
       //remove the mark from Board.board and put it in the new spot
       Board.board[this.position[0]][this.position[1]] = 0;
       Board.board[tile.position[0]][tile.position[1]] = this.player;
@@ -453,12 +456,19 @@ window.onload = function() {
   //select the piece on click if it is the player's turn
   $('.piece').on("click", function () {
     var selected;
-    var isPlayersTurn = ($(this).parent().attr("class").split(' ')[0] == "player"+Board.playerTurn+"pieces");
+     if (computer == true) {
+         var isPlayersTurn = ($(this).parent().attr("class").split(' ')[0] == "player2pieces");
+     }
+    else{
+         var isPlayersTurn = ($(this).parent().attr("class").split(' ')[0] == "player"+Board.playerTurn+"pieces");
+     }
     if(isPlayersTurn && !Board.continuousjump && pieces[$(this).attr("id")].allowedtomove) {
       if($(this).hasClass('selected')) selected = true;
       $('.piece').each(function(index) {$('.piece').eq(index).removeClass('selected')});
       if(!selected) {
         $(this).addClass('selected');
+        // console.log(pieces[8].position[0]+" "+pieces[8].position[1])
+
       }
     } else {
       if(isPlayersTurn) {
@@ -486,10 +496,38 @@ window.onload = function() {
    	socket.emit('moveMsg', data);
   };
   
-  socket.on("moveResp", function (data) {console.log(data)})
+  socket.on("moveResp", function (data) {
+      // console.log(data['py']);
+      computer_move_piece(data);
+  });
 
-  socket.on("init", function (data) {console.log("my id = "+data); connectionID=data})
-
+  socket.on("init", function (data) {console.log("my id = "+data); connectionID=data});
+    
+  var computer_move_piece = function(data){
+      console.log(data);
+      // find piece to move
+      if (pieces[8].position[0] == data['py'] && pieces[8].position[1] == data['px']){
+          console.log("yes!")
+      }
+      for (i in pieces){
+          if (pieces[i].position[0] == data['py'] && pieces[i].position[1] == data['px']){
+              console.log("found piece")
+              for (j in tiles){
+                  if (tiles[j].position[0]==data['ty'] && tiles[j].position[1]==data['tx']){
+                      console.log("moving"+pieces[i].position[0]+" "+pieces[i].position[1]+" to "+tiles[j].position[0]+" "+tiles[j].position[1]);
+                      pieces[i].move(tiles[j]);
+                      Board.changePlayerTurn();
+                      return;
+                  }
+              }
+          } 
+      }
+      // console.log("moving"+pieces[8].position[0]+" "+pieces[8].position[1]+" to "+tiles[12].position[0]+" "+tiles[12].position[1]);
+      // pieces[8].move(tiles[12]);
+      console.log("didn't find")
+      return;
+    };
+  
   //move piece when tile is clicked
   $('.tile').on("click", function () {
     //make sure a piece is selected

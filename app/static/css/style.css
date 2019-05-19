@@ -127,7 +127,7 @@ div.stats #player2 .capturedPiece {
       border-radius: 6vmin;
       display: inline-block;
       box-sizing: border-box;
-      transition: all 0.2s linear;
+      transition: all 2s linear;
       margin: 5px; 
 }
 div.stats div.turn {
