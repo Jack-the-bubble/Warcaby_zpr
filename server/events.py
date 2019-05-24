@@ -52,11 +52,13 @@ def handle_move(data, id):
     # k = Klient.Klient(5)
     print(int(clients[socketID.index(id)].getID()))
     clients[socketID.index(id)].convert_and_update(int_board)
-    move = {'px': 1, 'py': 2, 'tx': 0, 'ty': 7}
-    move['px']=input("px")
+    move = {'px': [1, 0], 'py': [2, 3], 'tx': [0, 1], 'ty': [3, 4], 'rx':[], 'ry':[]}
+    move['px'] = input("px")
     move['py'] = input("py")
     move['tx'] = input("tx")
     move['ty'] = input("ty")
+    move['rx'] = input("rx")
+    move['ry'] = input("ry")
     #send computer response
     emit('moveResp', move)
     

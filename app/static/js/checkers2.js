@@ -1,5 +1,4 @@
 window.onload = function() {
-
   var connectionID = -1
   //The initial setup
   var gameBoard = [
@@ -59,17 +58,29 @@ window.onload = function() {
 	  		}
       }*/
         console.log("moving piece from server")
+
+
       //remove the mark from Board.board and put it in the new spot
       Board.board[this.position[0]][this.position[1]] = 0;
       Board.board[tile.position[0]][tile.position[1]] = this.player;
       this.position = [tile.position[0], tile.position[1]];
       //change the css using board's dictionary
+
       this.element.css('top', Board.dictionary[this.position[0]]);
       this.element.css('left', Board.dictionary[this.position[1]]);
+      //   this.element.animate({'top':Board.dictionary[this.position[0]], 'left':Board.dictionary[this.position[1]]}, {duration:3000, easing:'linear'});
+      //   this.element.animate({'left':Board.dictionary[this.position[1]]}, {duration:"slow", easing:'linear'});
+
       //if piece reaches the end of the row on opposite side crown it a king (can move all directions)
-      if(!this.king && (this.position[0] == 0 || this.position[0] == 7 ))
-        this.makeKing();
-      return true;
+      if(!this.king && (this.position[0] == 0 || this.position[0] == 7 )) {
+          this.makeKing();
+      }
+      // if (this.element.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend')){
+            console.log("piece moved");
+            // gotowe = true;
+            return true;
+        // }
+      // return true;
     };
     
     this.move_regular = function () {
@@ -484,7 +495,22 @@ window.onload = function() {
   $('#cleargame').on("click", function () {
     Board.clear();
   });
-  
+
+
+  var find_index = function(array, x, y){
+      console.log("looking for place in"+x+" "+y);
+      console.log("array length: "+array.length);
+      for ( i = 0; i < array.length; i++){
+          console.log("pozycja: "+array[i].position);
+          if (array[i].position[1] == x && array[i].position[0] == y){
+              return i;
+
+          }
+      }
+      console.log("didn't find position");
+      return -1;
+    };
+
   var sendMove = function(whos_turn, piece, tile, all_board){
   		console.log("sending a message about a move");
 		var data = {
@@ -495,38 +521,104 @@ window.onload = function() {
    	};
    	socket.emit('moveMsg', data);
   };
-  
+
+  var move_with_sequence = function(param_list){
+      if (param_list.length > 0) {
+          console.log("current move to make: ");
+          console.log(param_list[0]);
+          computer_move_piece(param_list[0], function () {
+              // if (param_list.length > 0) {
+                  param_list.splice(0, 1);
+                  move_with_sequence(param_list);
+              // }
+          });
+      }
+      else {
+          console.log("finished sequence");
+          return;
+      }
+  };
+
   socket.on("moveResp", function (data) {
-      // console.log(data['py']);
-      computer_move_piece(data);
+      //move as many times as needed
+
+      var move_list = []
+      for(k in data.px) {
+          move_list[k] = {'px': data.px[k], 'py': data.py[k], "tx": data.tx[k], 'ty': data.ty[k], 'rx': data.rx[k], 'ry':data.ry[k]};
+          console.log(move_list[k]);
+      }
+      move_with_sequence(move_list);
+      Board.changePlayerTurn();
+
   });
 
   socket.on("init", function (data) {console.log("my id = "+data); connectionID=data});
-    
-  var computer_move_piece = function(data){
-      console.log(data);
-      // find piece to move
-      if (pieces[8].position[0] == data['py'] && pieces[8].position[1] == data['px']){
-          console.log("yes!")
-      }
-      for (i in pieces){
-          if (pieces[i].position[0] == data['py'] && pieces[i].position[1] == data['px']){
-              console.log("found piece")
-              for (j in tiles){
-                  if (tiles[j].position[0]==data['ty'] && tiles[j].position[1]==data['tx']){
-                      console.log("moving"+pieces[i].position[0]+" "+pieces[i].position[1]+" to "+tiles[j].position[0]+" "+tiles[j].position[1]);
-                      pieces[i].move(tiles[j]);
-                      Board.changePlayerTurn();
-                      return;
-                  }
-              }
-          } 
-      }
-      // console.log("moving"+pieces[8].position[0]+" "+pieces[8].position[1]+" to "+tiles[12].position[0]+" "+tiles[12].position[1]);
-      // pieces[8].move(tiles[12]);
-      console.log("didn't find")
-      return;
+
+    var computer_move_piece = function(data, callback){
+        console.log(data);
+        // find piece to move
+        for (i in pieces){
+            if (pieces[i].position[0] == data['py'] && pieces[i].position[1] == data['px']){
+                console.log("found piece")
+                for (j in tiles){
+                    if (tiles[j].position[0]==data['ty'] && tiles[j].position[1]==data['tx']){
+                        pieces[i].move(tiles[j]);
+
+                        if (data.rx > -1 && data.rx <= 7){
+                            console.log("removing from coordinates:"+data.rx+" "+data.ry);
+                            var index = find_index(pieces, data.rx, data.ry);
+                            console.log("found index to remove: "+index)
+                            pieces[index].remove();
+                        }
+                        console.log("removed or not")
+
+                        console.log("moving"+pieces[i].position[0]+" "+pieces[i].position[1]+" to "+tiles[j].position[0]+" "+tiles[j].position[1]);
+                        pieces[i].element.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',
+                            function () {
+                                callback();
+                            }
+                        );
+                        return true;
+                    }
+                }
+            }
+        }
+        console.log("didn't find")
+        return false;
     };
+
+
+
+  // var computer_move_piece = function(data){
+  //     console.log(data);
+  //     // find piece to move
+  //     if (pieces[8].position[0] == data['py'] && pieces[8].position[1] == data['px']){
+  //         console.log("yes!")
+  //     }
+  //     for (i in pieces){
+  //         if (pieces[i].position[0] == data['py'] && pieces[i].position[1] == data['px']){
+  //             console.log("found piece")
+  //             for (j in tiles){
+  //                 if (tiles[j].position[0]==data['ty'] && tiles[j].position[1]==data['tx']){
+  //                         pieces[i].move(tiles[j]);
+  //
+  //                     // pieces[i].element.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
+  //                     //     console.log("piece moved");
+  //                     //     return;
+  //
+  //                     // });
+  //                         console.log("moving"+pieces[i].position[0]+" "+pieces[i].position[1]+" to "+tiles[j].position[0]+" "+tiles[j].position[1]);
+  //                     // Board.changePlayerTurn();
+  //                     return;
+  //                 }
+  //             }
+  //         }
+  //     }
+  //     // console.log("moving"+pieces[8].position[0]+" "+pieces[8].position[1]+" to "+tiles[12].position[0]+" "+tiles[12].position[1]);
+  //     // pieces[8].move(tiles[12]);
+  //     console.log("didn't find")
+  //     return;
+  //   };
   
   //move piece when tile is clicked
   $('.tile').on("click", function () {

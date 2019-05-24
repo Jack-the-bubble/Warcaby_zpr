@@ -185,7 +185,7 @@ div#board .player1pieces .piece {
     border-radius: 6vmin;
     display: inline-block;
     box-sizing: border-box;
-    transition: all 0.2s linear;
+    transition: all 0.1s linear;
     margin-top: 1vmin;
     margin-left: 1vmin;
     cursor: pointer;
@@ -205,7 +205,7 @@ div#board .player2pieces .piece {
     border-radius: 6vmin;
     display: inline-block;
     box-sizing: border-box;
-    transition: all 0.2s linear;
+    transition: all 0.1s linear;
     margin-top: 1vmin;
     margin-left: 1vmin;
     cursor: pointer;
