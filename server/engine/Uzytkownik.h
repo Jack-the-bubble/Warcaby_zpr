@@ -1,7 +1,5 @@
 #pragma once
 #include "Gracz.h"
-#include <boost/python.hpp>
-
 class Uzytkownik :
 	public Gracz
 {
@@ -17,6 +15,8 @@ public:
 	virtual int getK();
 	virtual int getW();
 	virtual void update( const int plansza [8][8]);
+
+
 	int possibleMoves();
 	int bicie( int,int,int);
 	bool czyDamka();
@@ -30,4 +30,6 @@ private:
 	int moves_;
 	bool biciePossible;
 	bool damka = false;
+	int boardCopy[8][8];
 };
+
