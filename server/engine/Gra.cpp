@@ -1,6 +1,8 @@
 #include "Gra.h"
 #include "Uzytkownik.h"
 #include "Klient.h"
+#include "Komputer.h"
+#include "Move.h"
 #include <iostream>
 using namespace std;
 
@@ -41,30 +43,21 @@ void Gra::play()
 {
 	this->drukuj();
 
-	Uzytkownik pl1(1);
+	//Uzytkownik pl1(1);
+	Komputer pl1(-1);
 	player1 = &pl1;
 
-	Uzytkownik pl2(-1);
+	Komputer pl2(1);
 	player2 = &pl2;
 
 
 	while (plansza.getPionkiBiale() != 0 && plansza.getPionkiCzarne() != 0) 
 	{
 		this->player1notify();
-
-		 //makeMove(int graczID, int w_prev, int k_prev, int w_next, int k_next)
-
-		plansza.makeMove(player1->getID(), player1->getPrevW(), player1->getPrevK(), player1->getW(), player1->getK());  //to usuniemy jak bedzie komputer
-
-
-		//TODO
-		//updatePlansza(player1->boardCopy); // przekazanie zaktualizowanej planszy
-
-
+		plansza.makeMove(player1->getBestMove());
 		this->drukuj();
 		this->player2notify();
-		plansza.makeMove(player2->getID(), player2->getPrevW(), player2->getPrevK(), player2->getW(), player2->getK());
-
+		plansza.makeMove(player2->getBestMove());
 		this->drukuj();
 	}
 

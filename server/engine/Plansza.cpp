@@ -88,7 +88,7 @@ int Plansza::bicie(int graczID, int w_prev, int k_prev, int w_next, int k_next)
 		}
 
 	}
-	if (graczID * (w_prev - w_next) == 2)  //tu zbija przy pojedynczym biciu do ty�u
+	if (graczID * (w_prev - w_next) == 2)  //tu zbija przy pojedynczym biciu do tylu
 	{
 		if (k_next > k_prev)
 		{
@@ -168,4 +168,18 @@ int Plansza::getPionkiBiale()
 int Plansza::getPionkiCzarne()
 {
 	return this->pionkiCzarne;
+}
+
+void Plansza::makeMove(Move move)
+{
+
+	plansza[move.from[0]][move.from[1]] = 0;
+	plansza[move.to[0]][move.to[1]] = move.ID;
+
+	vector<int>::iterator it;
+	vector<int>::iterator it2;
+	for (it = move.capturedRow.begin(), it2 = move.capturedCol.begin(); it != move.capturedRow.end(); it++, it2++)
+	{
+		plansza[*it][*it2] = 0;  //TODO check
+	}
 }

@@ -321,7 +321,16 @@ void Uzytkownik::update(const int plansza[8][8])
 			boardCopy[i][j] = plansza[i][j];
 	}
 
-	//sprawdzenie czy jest przymus bicia
+
+
+	moves_ = 0;
+	do 
+	{
+		while (wybierzPionek() == false) {}
+		if (!damka)
+		{  
+			for (int i = 0; i < size_; ++i)
+			{	//sprawdzenie czy jest przymus bicia
 	for (int i = 0; i < size_; ++i)
 	{
 		for (int j = 0; j < size_; ++j)
@@ -347,15 +356,6 @@ void Uzytkownik::update(const int plansza[8][8])
 		}
 
 	}
-
-	moves_ = 0;
-	do 
-	{
-		while (wybierzPionek() == false) {}
-		if (!damka)
-		{  
-			for (int i = 0; i < size_; ++i)
-			{
 				for (int j = 0; j < size_; ++j)
 				{
 					if (boardCopy[i][j] == 2) boardCopy[i][j] = 1;
