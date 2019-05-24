@@ -34,3 +34,15 @@ void Move::addCaptured(int row, int col)
 	capturedRow.push_back(row);
 	capturedCol.push_back(col);
 }
+
+void Move::operator=(Move toCopy)
+{
+	from[0] = toCopy.from[0];
+	from[1] = toCopy.from[1];
+	to[0] = toCopy.to[0];
+	to[1] = toCopy.to[1];
+	ID = toCopy.ID;
+	capturedCol = toCopy.capturedCol;
+	capturedRow = toCopy.capturedRow;
+
+}

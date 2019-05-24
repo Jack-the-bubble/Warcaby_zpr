@@ -453,6 +453,41 @@ std::list<Move> Komputer::nextPositions(int ID, int dir, int k, int w)
 				for (int i = 0; i < lastsize; ++i) myMoves.pop_front();
 			}
 		}
+
+		if (boardCopy[w][k] == ID && k + dir * 2 < size_ && k + dir * 2 >= 0 && w - ID * 2 >= 0 && w - ID * 2 < size_
+			&& boardCopy[w - ID * 2][k + dir * 2] == 0 && boardCopy[w - ID * 1][k + dir * 1] == -ID)    //bicie w tyl
+		{
+
+			Move newMove(w, k, w - 2 * ID, k + 2 * dir, ID, w - ID * 1, k + dir * 1);
+			myMoves.push_back(newMove);
+			makeMove(newMove);
+
+			int lastsize = myMoves.size();
+
+			std::list<Move> nextList;
+
+			if (!(nextList = nextPositions(ID, 1, k + dir * 2, w - ID * 2)).empty())
+				myMoves.splice(myMoves.end(), nextList);
+			if (!(nextList = nextPositions(ID, -1, k + dir * 2, w - ID * 2)).empty())
+				myMoves.splice(myMoves.end(), nextList);
+
+
+
+			rollBackMove(newMove);
+			if (lastsize == myMoves.size())
+			{
+				return myMoves;
+			}
+			else
+			{
+				for (list<Move>::iterator it = myMoves.begin(); it != myMoves.end(); it++)
+				{
+					(*it).addCaptured(w - ID * 1, k + dir * 1);
+				}
+				for (int i = 0; i < lastsize; ++i) myMoves.pop_front();
+			}
+		}
+
 	}
 
 	return myMoves;

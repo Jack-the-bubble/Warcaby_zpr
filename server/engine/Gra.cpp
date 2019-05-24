@@ -51,7 +51,7 @@ void Gra::play()
 	player2 = &pl2;
 
 
-	while (plansza.getPionkiBiale() != 0 && plansza.getPionkiCzarne() != 0) 
+	while (plansza.getPionkiBiale() != 0 || plansza.getPionkiCzarne() != 0) 
 	{
 		this->player1notify();
 		plansza.makeMove(player1->getBestMove());

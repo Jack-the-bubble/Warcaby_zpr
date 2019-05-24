@@ -12,5 +12,6 @@ public:
 	std::vector<int> capturedCol;
 	int ID;
 	void addCaptured(int row, int col);
+	void operator= (Move);
 };
 
