@@ -1,4 +1,4 @@
-#pragma once
+//#pragma once
 #include "Plansza.h"
 #include "Gracz.h"
 #include "Klient.h"
