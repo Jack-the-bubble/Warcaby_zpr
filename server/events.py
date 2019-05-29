@@ -8,6 +8,7 @@ socketID = []
 #assign a unique ID to a new player
 def initialize_player(id):
     if (len(clients) == 0):
+        # TODO: stworzyc klase Gra i niech  se gra
         k = Klient.Klient(0)
         clients.append(k)
         clientIDs.append(0)

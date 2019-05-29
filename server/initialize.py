@@ -16,6 +16,7 @@ socketio = SocketIO(app)
 
 @app.route('/')
 def sessions():
+
 	return render_template('w3_test2.html', async_mode=socketio.async_mode)
 
 @socketio.on('moveMsg')
