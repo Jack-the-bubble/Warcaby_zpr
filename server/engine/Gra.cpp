@@ -1,8 +1,5 @@
 #include "Gra.h"
-#include "Klient.h"
-#include "Komputer.h"
-#include "Move.h"
-#include <iostream>
+
 using namespace std;
 
 

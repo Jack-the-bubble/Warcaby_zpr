@@ -1,6 +1,10 @@
 #pragma once
 #include "Plansza.h"
 #include "Gracz.h"
+#include "Klient.h"
+#include "Komputer.h"
+#include "Move.h"
+#include <iostream>
 
 class Gra
 {
@@ -13,7 +17,6 @@ public:
 	void player2notify();
 
 private:
-	//typedef std::unique_ptr<Gracz> pPlayer;
 	Plansza plansza;
 	Gracz* player1;
 	Gracz* player2;
