@@ -35,3 +35,15 @@ void Klient::convert_and_update(list board){
 	}
 	Klient::update(C_board);
 }
+
+void Klient::oponentMove(Move oponentMove) 
+{
+	//co chcesz
+}
+
+Move Klient::getBestMove()
+{
+	//wyslanie wykonanego ruchu do klasy Gra
+	Move any;
+	return any;
+}
