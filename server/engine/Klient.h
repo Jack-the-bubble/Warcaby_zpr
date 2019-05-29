@@ -1,4 +1,8 @@
 //#pragma once
+
+//#ifndef __KLIENT_H__
+//#define __KLIENT_H__
+
 #include "Gracz.h"
 
 #include <boost/python.hpp>
@@ -14,6 +18,10 @@ public:
 
 	virtual void update(const int plansza[8][8]){
 		this->get_override("update")();
+	}
+
+	virtual Move getBestMove(){
+		return this->get_override("getBestMove")();
 	}
 };
 
@@ -37,13 +45,17 @@ BOOST_PYTHON_MODULE(Klient){
 		class_<GraczWrap, boost::noncopyable>("Gracz")
 				.def("getID", pure_virtual(&Gracz::getID))
 				.def("update", pure_virtual(&Gracz::update))
+				.def("getBestMove", pure_virtual(&Gracz::getBestMove))
 //				.def("tru", pure_virtual(&Base::tru))
-				.def("getK", &Gracz::getK)
-				.def("getW", &Gracz::getW)
-				.def("getPrevK", &Gracz::getPrevK)
-				.def("getPrevW", &Gracz::getPrevW)
+//				.def("getK", &Gracz::getK)
+//				.def("getW", &Gracz::getW)
+//				.def("getPrevK", &Gracz::getPrevK)
+//				.def("getPrevW", &Gracz::getPrevW)
 		;
 
 		class_<Klient, bases<Gracz> >("Klient", init<int>())
 		        .def("convert_and_update", &Klient::convert_and_update);
 }
+
+
+//#endif

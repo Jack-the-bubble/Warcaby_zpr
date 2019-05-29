@@ -1,4 +1,8 @@
 //#pragma once
+
+#ifndef __MOVE_H__
+#define __MOVE_H__
+
 #include<vector>
 class Move
 {
@@ -17,3 +21,4 @@ public:
 	bool kingCreate = false;
 };
 
+#endif

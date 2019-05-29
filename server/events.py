@@ -1,4 +1,5 @@
 from flask_socketio import SocketIO, send, emit
+# import gra
 import Klient
 
 clients=[]
@@ -10,6 +11,7 @@ def initialize_player(id):
     if (len(clients) == 0):
         # TODO: stworzyc klase Gra i niech  se gra
         k = Klient.Klient(0)
+        # k = gra.Gra()
         clients.append(k)
         clientIDs.append(0)
         socketID.append(id)

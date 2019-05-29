@@ -1,4 +1,7 @@
 //#pragma once
+#ifndef __GRACZ_H_
+#define __GRACZ_H_
+
 #include "Move.h"
 class Gracz
 {
@@ -14,3 +17,4 @@ public:
 
 };
 
+#endif

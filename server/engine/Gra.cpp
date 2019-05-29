@@ -77,3 +77,6 @@ void Gra::player2notify()
 
 }
 
+int main(){
+	return 0;
+}

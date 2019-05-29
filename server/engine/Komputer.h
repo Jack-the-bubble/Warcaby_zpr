@@ -1,8 +1,10 @@
 //#pragma once
+
+
 #include <vector>
 #include<list>
 #include "Gracz.h"
-#include "Move.h"
+//#include "Move.h"
 class Komputer :
 	public Gracz
 {

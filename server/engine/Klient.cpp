@@ -36,7 +36,7 @@ void Klient::convert_and_update(list board){
 	Klient::update(C_board);
 }
 
-void Klient::oponentMove(Move oponentMove) 
+void Klient::oponentMove(Move oponentMove)
 {
 	//co chcesz
 }
