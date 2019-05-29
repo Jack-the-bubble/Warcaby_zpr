@@ -68,7 +68,7 @@ bool Komputer::possibleMoves(int ID)
 
 	else  //jesli nie ma bicia
 	{
-		if (czyRuchBezBicia(ID, 1, k_, w_) || czyRuchBezBicia( ID, -1, k_, w_))
+		if (czyRuchBezBicia(ID, 1, k_, w_) || czyRuchBezBicia( ID, -1, k_, w_) || isKingMoveBack( ID, 1, k_, w_) || isKingMoveBack(ID, -1, k_, w_))
 		{
 			moves = true;
 		}
@@ -705,7 +705,7 @@ std::list<Move> Komputer::nextKingPositions(int ID, int dir, int k, int w)
 				&& (boardCopy[w + ID * i][k + dir * i] == 0 || i == 0); ++i)
 			{
 				//znalezienie pionka do bicia na nastepnym polu
-				if (boardCopy[w + ID * (1 + i)][k + 1 + i] == -(ID) || boardCopy[w + ID * (1 + i)][k + 1 + i] == -2 * (ID))
+				if (boardCopy[w + ID * (1 + i)][k + dir*(1 + i)] == -(ID) || boardCopy[w + ID * (1 + i)][k + dir*(1 + i)] == -2 * (ID))
 				{
 					//opis warunkow po kolei: j-ty wiersz za pionkiem >= 0 oraz <8; j-ta kolumna za pionkiem >=0 oraz <8; j-te miejsce za pionkiem puste 
 					for (int j = 0; w + ID * (2 + i + j) >= 0 && w + ID * (2 + i + j) < size_ && k + dir * (2 + i + j) >= 0
@@ -753,7 +753,7 @@ std::list<Move> Komputer::nextKingPositions(int ID, int dir, int k, int w)
 					&& (boardCopy[w - ID * i][k + dir * i] == 0 || i == 0); ++i)
 				{
 					//znalezienie pionka do bicia na nastepnym polu
-					if (boardCopy[w - ID * (1 + i)][k + 1 + i] == -(ID) || boardCopy[w - ID * (1 + i)][k + 1 + i] == -2 * (ID))
+					if (boardCopy[w - ID * (1 + i)][k + dir*(1 + i)] == -(ID) || boardCopy[w - ID * (1 + i)][k + dir*(1 + i)] == -2 * (ID))
 					{
 						//opis warunkow po kolei: j-ty wiersz za pionkiem >= 0 oraz <8; j-ta kolumna za pionkiem >=0 oraz <8; j-te miejsce za pionkiem puste 
 						for (int j = 0; w - ID * (2 + i + j) >= 0 && w - ID * (2 + i + j) < size_ && k + dir * (2 + i + j) >= 0
