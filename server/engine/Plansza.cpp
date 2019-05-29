@@ -3,8 +3,8 @@
 using namespace std;
 
 Plansza::Plansza()
-{ 
-	int i,j;
+{
+	int i, j;
 	for (i = 0; i < kolumny; ++i)
 	{
 		for (j = 0; j < kolumny; ++j)
@@ -22,6 +22,8 @@ Plansza::Plansza()
 		if (i % 2 == 1) plansza[i][1] = plansza[i][3] = plansza[i][5] = plansza[i][7] = -1;
 		if (i % 2 == 0) plansza[i][0] = plansza[i][2] = plansza[i][4] = plansza[i][6] = -1;
 	}
+
+	plansza[2][0] = 2;  //ZMIANA
 	pionkiBiale = pionkiCzarne = 12;
 }
 
@@ -161,14 +163,20 @@ int Plansza::bicie(int graczID, int w_prev, int k_prev, int w_next, int k_next)
 
 
 
-int Plansza::getPionkiBiale()
+bool Plansza::isWin()
 {
-	return this->pionkiBiale;
+	int i, j, cnt1 = 0, cnt2 = 0;
+	for (i = 0; i < kolumny; ++i)
+	{
+		for (j = 0; j < kolumny; ++j)
+		{
+			if(plansza[i][j] == 1 || plansza[i][j] == 2) ++cnt1;
+			else if (plansza[i][j] == -1 || plansza[i][j] == -2) ++cnt2;
+		}
+	}
+	return ((cnt1 == 0) || (cnt2 == 0));
 }
-int Plansza::getPionkiCzarne()
-{
-	return this->pionkiCzarne;
-}
+
 
 void Plansza::makeMove(Move move)
 {

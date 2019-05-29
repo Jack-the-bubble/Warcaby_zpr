@@ -17,8 +17,9 @@ using namespace std;
 
 int main()
 {
-	Gra* gra1;
-	gra1 = new Gra();
-	gra1->play();
+	Gra gra1;
+	gra1.play();
+	cout << "end of game" << endl;
+	while (true) {}
 	return 0;
 }

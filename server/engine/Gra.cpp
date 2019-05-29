@@ -1,5 +1,4 @@
 #include "Gra.h"
-#include "Uzytkownik.h"
 #include "Klient.h"
 #include "Komputer.h"
 #include "Move.h"
@@ -15,7 +14,6 @@ Gra::Gra()
 
 Gra::~Gra()
 {
-	delete player1, player2;
 }
 
 void Gra::drukuj()
@@ -29,10 +27,14 @@ void Gra::drukuj()
 		std::cout <<i<< "|";
 		for (int j = 0; j < kolumny; ++j)
 		{
-			if (plansza.getPlansza(i,j) == 1)
+			if (plansza.getPlansza(i, j) == 1)
 				std::cout << "O|";
-			else if (plansza.getPlansza(i,j) == -1)
+			else if (plansza.getPlansza(i, j) == -1)
 				std::cout << "X|";
+			else if (plansza.getPlansza(i, j) == 2)
+				cout << "Q|";
+			else if (plansza.getPlansza(i, j) == -2)
+				cout << "W|";
 			else std::cout << " |";
 		}
 		std::cout << std::endl;
@@ -44,19 +46,20 @@ void Gra::play()
 	this->drukuj();
 
 	//Uzytkownik pl1(1);
-	Komputer pl1(-1);
+	Komputer pl1(1);
 	player1 = &pl1;
 
-	Komputer pl2(1);
+	Komputer pl2(-1);
 	player2 = &pl2;
 
 
-	while (plansza.getPionkiBiale() != 0 || plansza.getPionkiCzarne() != 0) 
+	while (!(plansza.isWin())) 
 	{
-		this->player1notify();
+ 		this->player1notify();
 		plansza.makeMove(player1->getBestMove());
 		this->drukuj();
 		this->player2notify();
+		//player1->oponentMove(player2->getBestMove()); 
 		plansza.makeMove(player2->getBestMove());
 		this->drukuj();
 	}
@@ -77,13 +80,3 @@ void Gra::player2notify()
 
 }
 
-void Gra::updatePlansza(int planszaCopy[8][8])
-{
-	for (int i = 0; i < 8; ++i)
-	{
-		for (int j = 0; i < 8; ++j)
-		{
-			plansza.plansza[i][j] = planszaCopy[i][j];
-		}
-	}
-}

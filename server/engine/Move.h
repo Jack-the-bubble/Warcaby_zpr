@@ -13,5 +13,7 @@ public:
 	int ID;
 	void addCaptured(int row, int col);
 	void operator= (Move);
+	void createKing();
+	bool kingCreate = false;
 };
 

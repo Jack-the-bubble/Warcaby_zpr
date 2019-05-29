@@ -16,6 +16,7 @@ public:
 		Move any;
 		return any;
 	};
+	virtual void oponentMove(Move oponentMove) { };
 	int boardCopy[8][8];
 	const int size_ = 8;
 	//int pomBoard[8][8]; //plansza pomocnicza
