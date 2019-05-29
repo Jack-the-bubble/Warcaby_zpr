@@ -1,4 +1,4 @@
-#pragma once
+//#pragma once
 #include<vector>
 class Move
 {
@@ -13,5 +13,7 @@ public:
 	int ID;
 	void addCaptured(int row, int col);
 	void operator= (Move);
+	void createKing();
+	bool kingCreate = false;
 };
 

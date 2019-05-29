@@ -46,3 +46,8 @@ void Move::operator=(Move toCopy)
 	capturedRow = toCopy.capturedRow;
 
 }
+
+void Move::createKing()
+{
+	ID = 2 * ID;
+}
