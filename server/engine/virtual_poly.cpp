@@ -1,7 +1,7 @@
 //
 // Created by ig-88 on 18.05.19.
 //
-
+#include "Gracz.h"
 #include <boost/python.hpp>
 
 // Mockup abstract type.
@@ -22,6 +22,7 @@ struct polygon_wrap
 	polygon_wrap(): polygon(0, 0) {}
 	int area() { return this->get_override("area")(); }
 };
+
 
 BOOST_PYTHON_MODULE(virtual_poly){
 	namespace python = boost::python;

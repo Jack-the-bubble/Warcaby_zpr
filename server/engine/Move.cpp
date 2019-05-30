@@ -9,7 +9,7 @@ Move::Move()
 	ID = 0;
 }
 
-Move::Move(int from_r, int from_c, int to_r, int to_c, int ID_, int rowC, int colC )
+Move::Move(int from_r, int from_c, int to_r, int to_c, int ID_, int rowC, int colC)
 {
 	from[0] = from_r;
 	from[1] = from_c;

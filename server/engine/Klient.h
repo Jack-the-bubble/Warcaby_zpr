@@ -1,13 +1,15 @@
 //#pragma once
 
-//#ifndef __KLIENT_H__
-//#define __KLIENT_H__
+#ifndef __KLIENT_H__
+#define __KLIENT_H__
 
 #include "Gracz.h"
+#include "Move.h"
 
 #include <boost/python.hpp>
 using namespace boost::python;
 
+//class Move{};
 
 class GraczWrap : public Gracz, public wrapper<Gracz>
 {
@@ -23,6 +25,10 @@ public:
 	virtual Move getBestMove(){
 		return this->get_override("getBestMove")();
 	}
+
+//	virtual Move getOponentMove(Move oponentMove){
+//		return this->get_override("getOponentMove")();
+//	}
 };
 
 class Klient :
@@ -35,27 +41,11 @@ public:
 	virtual int getID();
 	virtual void oponentMove(Move oponentMove);
 	virtual Move getBestMove();
-	void convert_and_update(list board);
+	void convert_and_update(boost::python::list board);
 	int planszaCopy[8][8];
 	bool ready = false;
 	int graczID;
 };
 
-BOOST_PYTHON_MODULE(Klient){
-		class_<GraczWrap, boost::noncopyable>("Gracz")
-				.def("getID", pure_virtual(&Gracz::getID))
-				.def("update", pure_virtual(&Gracz::update))
-				.def("getBestMove", pure_virtual(&Gracz::getBestMove))
-//				.def("tru", pure_virtual(&Base::tru))
-//				.def("getK", &Gracz::getK)
-//				.def("getW", &Gracz::getW)
-//				.def("getPrevK", &Gracz::getPrevK)
-//				.def("getPrevW", &Gracz::getPrevW)
-		;
 
-		class_<Klient, bases<Gracz> >("Klient", init<int>())
-		        .def("convert_and_update", &Klient::convert_and_update);
-}
-
-
-//#endif
+#endif

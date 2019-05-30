@@ -1,5 +1,6 @@
 //#pragma once
-
+#ifndef _KOMPUTER_H_
+#define _KOMPUTER_H_
 
 #include <vector>
 #include<list>
@@ -48,3 +49,4 @@ private:
 	void rollBackMove(Move);
 }; 
 
+#endif

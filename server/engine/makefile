@@ -95,10 +95,16 @@
 #BOOST_LIB = /usr/lib
 ## compile mesh classes
 #TARGET = Klient
-#$(TARGET).so: clean $(TARGET).o
-#	g++ -shared -Wl,--export-dynamic $(TARGET).o -L$(BOOST_LIB) -lboost_python$(PYTHON_VER) -L/usr/lib/python$(PYTHON_VERSION)/config -lpython$(PYTHON_VERSION) -o ../$(TARGET).so
+#$(TARGET).so: clean gracz.o $(TARGET).o
+#	g++ -shared -Wl,--export-dynamic move.o gracz.o $(TARGET).o -L$(BOOST_LIB) -lboost_python$(PYTHON_VER) -L/usr/lib/python$(PYTHON_VERSION)/config -lpython$(PYTHON_VERSION) -o ../$(TARGET).so
 #$(TARGET).o:
 #	g++ -I$(PYTHON_INCLUDE) -I$(BOOST_INC) -fPIC -c $(TARGET).cpp -o $(TARGET).o
+#
+#gracz.o: move.o
+#	g++ -I$(PYTHON_INCLUDE) -I$(BOOST_INC) -fPIC -c Gracz.cpp -o gracz.o
+#
+#move.o:
+#	g++ -I$(PYTHON_INCLUDE) -I$(BOOST_INC) -fPIC -c Move.cpp -o move.o
 #
 #clean:
 #	@rm -f *.o
@@ -137,31 +143,36 @@ BOOST_INC = /usr/include
 BOOST_LIB = /usr/lib
 # compile mesh classes
 
-all: clean move.o gracz.o plansza.o komputer.o klient.o gra.o
-	 g++ -shared -Wl,--export-dynamic gra.o -L$(BOOST_LIB) -lboost_python$(PYTHON_VER) -L/usr/lib/python$(PYTHON_VERSION)/config -lpython$(PYTHON_VERSION) -o gra.so
+#all: clean gracz.o plansza.o komputer.o klient.o gra.o
+#	 g++ -shared -Wl,--export-dynamic gracz.o klient.o move.o gra.o -L$(BOOST_LIB) -lboost_python$(PYTHON_VER) -L/usr/lib/python$(PYTHON_VERSION)/config -lpython$(PYTHON_VERSION) -o gra.so
 
+engine.so: clean gracz.o klient.o plansza.o komputer.o gra.o engine.o
+	g++ -shared -Wl,--export-dynamic plansza.o komputer.o gracz.o klient.o move.o gra.o engine.o -L$(BOOST_LIB) -lboost_python$(PYTHON_VER) -L/usr/lib/python$(PYTHON_VERSION)/config -lpython$(PYTHON_VERSION) -o engine.so
+
+engine.o:
+	g++ -I/usr/include/python3.6m -I/usr/include -fPIC -c engine.cpp -o engine.o
 
 gra.o:
 	 g++ -I/usr/include/python3.6m -I/usr/include -fPIC -c Gra.cpp -o gra.o
 
-klient.so: klient.o
-	g++ -shared -Wl,--export-dynamic klient.o -L$(BOOST_LIB) -lboost_python$(PYTHON_VER) -L/usr/lib/python$(PYTHON_VERSION)/config -lpython$(PYTHON_VERSION) -o klient.so
+#klient.so: klient.o gracz.o
+#	g++ -shared -Wl,--export-dynamic klient.o -L$(BOOST_LIB) -lboost_python$(PYTHON_VER) -L/usr/lib/python$(PYTHON_VERSION)/config -lpython$(PYTHON_VERSION) -o klient.so
 
 klient.o:
 	g++ -I$(PYTHON_INCLUDE) -I$(BOOST_INC) -fPIC -c Klient.cpp -o klient.o
 #	g++ -c -FPIC Klient.cpp -o klient.o
 
 komputer.o:
-	g++ -o komputer.o -c Komputer.cpp
+	g++ -I$(PYTHON_INCLUDE) -I$(BOOST_INC) -fPIC -c Komputer.cpp -o komputer.o
 
 plansza.o:
-	g++ -o plansza.o -c Plansza.cpp
+	g++ -I$(PYTHON_INCLUDE) -I$(BOOST_INC) -fPIC -c Plansza.cpp -o plansza.o
 
-gracz.o:
-	g++ -o gracz.o -c Gracz.cpp
+gracz.o: move.o
+	g++ -I$(PYTHON_INCLUDE) -I$(BOOST_INC) -fPIC -c Gracz.cpp -o gracz.o
 
 move.o:
-	g++ -o move.o -c Move.cpp
+	g++ -I$(PYTHON_INCLUDE) -I$(BOOST_INC) -fPIC -c Move.cpp -o move.o
 
 clean:
 	@rm -f *.o

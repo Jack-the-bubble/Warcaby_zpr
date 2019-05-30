@@ -26,7 +26,7 @@ int Klient::getID()
 	return graczID;
 }
 
-void Klient::convert_and_update(list board){
+void Klient::convert_and_update(boost::python::list board){
 	int C_board[8][8];
 	for (int i = 0; i < 8; i++){
 		for (int j = 0; j < 8; j++){

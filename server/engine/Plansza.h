@@ -1,4 +1,7 @@
 //#pragma once
+#ifndef _PLANSZA_H_
+#define _PLANSZA_H_
+
 #include "Move.h"
 class Plansza
 {
@@ -13,3 +16,4 @@ private:
 	const int kolumny = 8;
 };
 
+#endif
