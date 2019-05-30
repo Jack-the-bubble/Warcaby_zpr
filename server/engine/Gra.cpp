@@ -4,8 +4,13 @@ using namespace std;
 
 
 
-Gra::Gra()
+Gra::Gra(int i)
 {
+		Komputer pl1(1);
+	player1 = &pl1;
+
+	Komputer pl2(-1);
+	player2 = &pl2;
 }
 
 
@@ -43,11 +48,11 @@ void Gra::play()
 	this->drukuj();
 
 	//Uzytkownik pl1(1);
-	Komputer pl1(1);
-	player1 = &pl1;
-
-	Komputer pl2(-1);
-	player2 = &pl2;
+//	Komputer pl1(1);
+//	player1 = &pl1;
+//
+//	Komputer pl2(-1);
+//	player2 = &pl2;
 
 
 	while (!(plansza.isWin())) 

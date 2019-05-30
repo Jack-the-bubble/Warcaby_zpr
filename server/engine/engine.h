@@ -35,7 +35,7 @@ BOOST_PYTHON_MODULE(engine){
 
 	class_<Komputer, bases<Gracz> >("Komputer", init<int>());
 
-	class_<Gra>("Gra", init<>())
+	class_<Gra>("Gra", init<int>())
 	        .def("drukuj", &Gra::drukuj)
 	        .def("play", &Gra::play)
 	        .def("player1notify", &Gra::player1notify)

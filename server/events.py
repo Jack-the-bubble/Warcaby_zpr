@@ -1,6 +1,6 @@
 from flask_socketio import SocketIO, send, emit
 # import gra
-import Klient
+import engine
 
 clients=[]
 clientIDs =[]
@@ -10,7 +10,8 @@ socketID = []
 def initialize_player(id):
     if (len(clients) == 0):
         # TODO: stworzyc klase Gra i niech  se gra
-        k = Klient.Klient(0)
+        # k = Klient.Klient(0)
+        k = engine.Gra(0)
         # k = gra.Gra()
         clients.append(k)
         clientIDs.append(0)
@@ -21,13 +22,13 @@ def initialize_player(id):
             if i not in clientIDs:
                 clientIDs.append(i)
                 socketID.append(id)
-                k = Klient.Klient(i)
+                k = engine.Gra(i)
                 clients.append(k)
                 emit('init', i)
                 break
             if i == len(clients)-1:
                 i+=1
-                k = Klient.Klient(i)
+                k = engine.Gra(i)
                 clientIDs.append(i)
                 socketID.append(id)
                 clients.append(k)
@@ -53,8 +54,8 @@ def handle_move(data, id):
     int_board = data['board']
     # print(int_board)
     # k = Klient.Klient(5)
-    print(int(clients[socketID.index(id)].getID()))
-    clients[socketID.index(id)].convert_and_update(int_board)
+    print(int(clients[socketID.index(id)].player1.getID()))
+    clients[socketID.index(id)].player1.convert_and_update(int_board)
     move = {'px': [1, 0], 'py': [2, 3], 'tx': [0, 1], 'ty': [3, 4], 'rx':[], 'ry':[]}
     move['px'] = input("px")
     move['py'] = input("py")

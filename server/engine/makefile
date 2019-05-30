@@ -147,7 +147,7 @@ BOOST_LIB = /usr/lib
 #	 g++ -shared -Wl,--export-dynamic gracz.o klient.o move.o gra.o -L$(BOOST_LIB) -lboost_python$(PYTHON_VER) -L/usr/lib/python$(PYTHON_VERSION)/config -lpython$(PYTHON_VERSION) -o gra.so
 
 engine.so: clean gracz.o klient.o plansza.o komputer.o gra.o engine.o
-	g++ -shared -Wl,--export-dynamic plansza.o komputer.o gracz.o klient.o move.o gra.o engine.o -L$(BOOST_LIB) -lboost_python$(PYTHON_VER) -L/usr/lib/python$(PYTHON_VERSION)/config -lpython$(PYTHON_VERSION) -o engine.so
+	g++ -shared -Wl,--export-dynamic plansza.o komputer.o gracz.o klient.o move.o gra.o engine.o -L$(BOOST_LIB) -lboost_python$(PYTHON_VER) -L/usr/lib/python$(PYTHON_VERSION)/config -lpython$(PYTHON_VERSION) -o ../engine.so
 
 engine.o:
 	g++ -I/usr/include/python3.6m -I/usr/include -fPIC -c engine.cpp -o engine.o
@@ -176,6 +176,6 @@ move.o:
 
 clean:
 	@rm -f *.o
-	@rm -f *.so
+	@rm -f ../*.so
 	@rm -f *.elf
 #########################

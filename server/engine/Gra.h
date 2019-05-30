@@ -12,14 +12,14 @@
 class Gra
 {
 public:
-	Gra();
+	Gra(int i);
 	~Gra();
 	void drukuj();
 	void play();
 	void player1notify();
 	void player2notify();
 
-private:
+//private:
 	Plansza plansza;
 	Gracz* player1;
 	Gracz* player2;
