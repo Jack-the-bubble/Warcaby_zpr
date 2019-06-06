@@ -14,7 +14,7 @@ public:
 	virtual Move getBestMove() = 0;
 	virtual void oponentMove(Move oponentMove) {};
 	int boardCopy[8][8];
-	const int size_ = 8;
+	const int SIZE = 8;
 
 };
 

@@ -34,8 +34,8 @@ private:
 	
 	int markBrd();
 
-	const int waga_pionka = 50;
-	const int waga_damki = 150;
+	const int WAGA_PIONKA = 50;
+	const int WAGA_DAMKI = 150;
 	int myCnt, oponentCnt;
 
 	
@@ -44,7 +44,6 @@ private:
 	std::list<Move> nextPositions(int ID, int dir, int k, int w);
 	std::list<Move> nextKingPositions(int ID, int dir, int k, int w);
 	bool isKingMoveBack(int ID, int dir, int k, int w);
-//	int boardCopy[8][8];
 	void makeMove(Move);
 	void rollBackMove(Move);
 }; 
