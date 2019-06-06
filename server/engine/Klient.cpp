@@ -13,6 +13,11 @@ Klient::~Klient()
 {
 }
 
+/**
+	Funkcja w ktorej gracz ma wskazac swoj ruch, po wyjsciu z niej w skladowej bestMove ma znalezc sie wskazany ruch
+
+	@param plansza[8][8] aktualny stan glownej planszy gry
+*/
 void Klient::update(const int plansza[8][8])
 {
 	//TODO
@@ -36,6 +41,11 @@ void Klient::convert_and_update(boost::python::list board){
 	Klient::update(C_board);
 }
 
+/**
+	Funkcja uzyskujaca ostatni ruch oponenta
+
+	@param oponentMove poprzedni ruch przeciwnika
+*/
 void Klient::oponentMove(Move oponentMove)
 {
 	//co chcesz

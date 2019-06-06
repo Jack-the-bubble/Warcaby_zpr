@@ -8,7 +8,11 @@
 #include "Komputer.h"
 #include "Move.h"
 #include <iostream>
-
+/**
+ *  \brief     Glowna klasa gry, jej metoda play jest petla glowna gry, kontroluje przeplyw ruchow i sprawdza terminalnosc planszy
+ *  \author    Katarzyna Seweryn
+ *  \date      2019
+ */
 class Gra
 {
 public:
@@ -20,10 +24,10 @@ public:
 	void player2notify();
 
 //private:
-	Plansza plansza;
-	Gracz* player1;
-	Gracz* player2;
-	const int kolumny = 8;
+	Plansza plansza;  /**< plansza gry   */
+	Gracz* player1;  /**< wskaznik na gracza 1 */
+	Gracz* player2;  /**< wskaznik na gracza 2 */
+	const int KOLUMNY = 8; /**< rozmiar planszy */
 };
 
 

@@ -11,6 +11,8 @@ using namespace boost::python;
 
 //class Move{};
 
+
+
 class GraczWrap : public Gracz, public wrapper<Gracz>
 {
 public:
@@ -31,6 +33,12 @@ public:
 //	}
 };
 
+/**
+ *  \brief     Klasa klienta(uzytkownika) wykonujacego ruch
+ *  \author    Katarzyna Seweryn
+ *  \author    Marcin Skrzypkowski
+ *  \date      2019
+ */
 class Klient :
 	public Gracz
 {
@@ -42,9 +50,7 @@ public:
 	virtual void oponentMove(Move oponentMove);
 	virtual Move getBestMove();
 	void convert_and_update(boost::python::list board);
-	int planszaCopy[8][8];
-	bool ready = false;
-	int graczID;
+	int graczID; /**< identyfikator gracza */
 };
 
 

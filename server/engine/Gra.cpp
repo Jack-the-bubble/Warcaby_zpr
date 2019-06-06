@@ -2,11 +2,15 @@
 
 using namespace std;
 
+/**
+	Konstruktor klasy Gra. Tworzy graczy z odpowiednimi identyfikatorami
 
+	@param i identyfikator klienta aplikacji frontendowej
+*/
 
 Gra::Gra(int i)
 {
-		Komputer pl1(1);
+	Komputer pl1(1);
 	player1 = &pl1;
 
 	Komputer pl2(-1);
@@ -18,16 +22,20 @@ Gra::~Gra()
 {
 }
 
+/**
+	Funkcja pomagajaca w testowaniu aplikacji. Wypisuje aktualna plansze na konsole
+*/
+
 void Gra::drukuj()
 {
 	std:cout << "W|";
-	for (int j = 0; j < kolumny; ++j) std::cout << j << "|";
+	for (int j = 0; j < KOLUMNY; ++j) std::cout << j << "|";
 	std::cout << std::endl;
-	for (int i = kolumny - 1; i >= 0; --i)
+	for (int i = KOLUMNY - 1; i >= 0; --i)
 	{
 	
 		std::cout <<i<< "|";
-		for (int j = 0; j < kolumny; ++j)
+		for (int j = 0; j < KOLUMNY; ++j)
 		{
 			if (plansza.getPlansza(i, j) == 1)
 				std::cout << "O|";
@@ -43,17 +51,12 @@ void Gra::drukuj()
 	}
 }
 
+/**
+	Glowna petla gry. Kontroluje przeplyw ruchow miedzy graczami, stan planszy i decyduje o koncu gry.
+*/
 void Gra::play()
 {
 	this->drukuj();
-
-	//Uzytkownik pl1(1);
-//	Komputer pl1(1);
-//	player1 = &pl1;
-//
-//	Komputer pl2(-1);
-//	player2 = &pl2;
-
 
 	while (!(plansza.isWin())) 
 	{
@@ -69,6 +72,9 @@ void Gra::play()
 	return;
 }
 
+/**
+	Funkcja wywolywana gdy gracz 1 ma wykonac ruch
+*/
 void Gra::player1notify()
 {
 
@@ -76,12 +82,11 @@ void Gra::player1notify()
 
 }
 
+/**
+	Funkcja wywolywana gdy gracz 1 ma wykonac ruch
+*/
 void Gra::player2notify()
 {
 	player2->update(plansza.plansza);
 
-}
-
-int main(){
-	return 0;
 }
