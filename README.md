@@ -28,8 +28,8 @@ W celu uruchomienia aplikacji należy:
   3. libboost-all-dev (boost), scons, python3-pip, Flask, flask-socketio, eventlet, pytest 
 
 ### Kompilacja
-
+	W celu kompilacji dla linuxa należy wejść do folderu server/engine/ i w konsoli uruchomić komendę makefile. Niemniej w projekcie znajduje się już skompilowana wersja potrzebnych bibliotek.
 ### Czyszczenie plików utworzonych przez SConst
-Należy wywołać z poziomu głównego katalogu projektu:
-**sconst --clean**
+Należy wywołać z poziomu katalogu server/engine/:
+**make clean**
 
