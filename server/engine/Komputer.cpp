@@ -45,8 +45,9 @@ void Komputer::update(const int plansza[8][8])
 		}
 	}
 	drukuj(boardCopy);
-
 	alfabetaFirst(depthMax, -1000000, 1000000);
+	bestMove.printMove();
+	cout<<"wyjscie z update"<<endl;
 	if(bestMove.ID != 0) makeMove(bestMove);
 }
 

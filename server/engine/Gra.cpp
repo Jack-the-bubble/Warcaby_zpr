@@ -188,3 +188,10 @@ int Gra::getID(){
 	return ID_;
 }
 
+int Gra::klientGet(){
+	player1->get();
+}
+
+void Gra::klientSet(int i){
+	player1->set(i);
+}

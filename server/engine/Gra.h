@@ -13,6 +13,7 @@
 
 typedef boost::shared_ptr<Komputer> Kom;
 typedef boost::shared_ptr<Klient> Kl;
+
 typedef boost::python::list pyList;
 //=======
 /**
@@ -36,6 +37,9 @@ public:
 	void assignID(int i);
 	void reset();
 	int getID();
+	int klientGet();
+	void klientSet(int i);
+
 	pyList convertAndSend();
 
 //private:
@@ -46,12 +50,13 @@ public:
 //	Gracz* player2;
 //	const int kolumny = 8;
 //=======
+
 	Plansza plansza;  /**< plansza gry   */
 	Kl player1;
 	Kom player2;
 	int ID_;
-//	Gracz* player1;  /**< wskaznik na gracza 1 */
-//	Gracz* player2;  /**< wskaznik na gracza 2 */
+//	Klient* player1;  /**< wskaznik na gracza 1 */
+//	Komputer* player2;  /**< wskaznik na gracza 2 */
 	const int KOLUMNY = 8; /**< rozmiar planszy */
 //>>>>>>> fc4467e51dbd79f216efd7794bb93c5f319c6835
 };

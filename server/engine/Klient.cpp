@@ -71,3 +71,11 @@ Move Klient::getBestMove()
 {
 	return latestMove;
 }
+
+void Klient::set(int i){
+	test = i;
+}
+
+int Klient::get(){
+	std::cout<<"oto test from klient "<<test<<std::endl;
+}

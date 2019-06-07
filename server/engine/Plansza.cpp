@@ -76,3 +76,4 @@ void Plansza::makeMove(Move move)
 		plansza[*it][*it2] = 0;  
 	}
 }
+

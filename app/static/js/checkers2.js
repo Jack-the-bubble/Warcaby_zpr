@@ -48,19 +48,6 @@ window.onload = function() {
       //moves the piece
       this.move_com = function (tile) {
           this.element.removeClass('selected');
-          // if(!Board.isValidPlacetoMove(tile.position[0], tile.position[1])) {console.log("wrong move "+tile.position[0]+" "+tile.position[1]);
-          //     return false;
-          // }
-          //make sure piece doesn't go backwards if it's not a king
-          /*      if(this.player == 1 && this.king == false) {
-                  if(tile.position[0] < this.position[0]){
-                  return false;
-                  }
-                } else if (this.player == 2 && this.king == false) {
-                   if(tile.position[0] > this.position[0]) {
-                       return false;
-                        }
-                }*/
           console.log("moving piece from server")
 
 
@@ -92,16 +79,6 @@ window.onload = function() {
       if(!Board.isValidPlacetoMove(tile.position[0], tile.position[1])) {console.log("wrong move "+tile.position[0]+" "+tile.position[1]);
         return false;
       }
-      //make sure piece doesn't go backwards if it's not a king
-/*      if(this.player == 1 && this.king == false) {
-        if(tile.position[0] < this.position[0]){ 
-        return false;
-        }
-      } else if (this.player == 2 && this.king == false) {
-         if(tile.position[0] > this.position[0]) {
-         	return false;
-	  		}
-      }*/
         console.log("moving piece from server")
 
 
@@ -120,12 +97,9 @@ window.onload = function() {
       if(!this.king && (this.position[0] == 0 || this.position[0] == 7 )) {
           this.makeKing();
       }
-      // if (this.element.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend')){
             console.log("piece moved");
             // gotowe = true;
             return true;
-        // }
-      // return true;
     };
     
     this.move_regular = function () {
@@ -157,12 +131,6 @@ window.onload = function() {
       //find what the displacement is
       var dx = newPosition[1] - this.position[1];
       var dy = newPosition[0] - this.position[0];
-      //make sure object doesn't go backwards if not a king
-/*      if(this.player == 1 && this.king == false) {
-        if(newPosition[0] < this.position[0]) return false;
-      } else if (this.player == 2 && this.king == false) {
-        if(newPosition[0] > this.position[0]) return false;
-      }*/
       //must be in bounds
       if(newPosition[0] > 7 || newPosition[1] > 7 || newPosition[0] < 0 || newPosition[1] < 0) return false;
       //middle tile where the piece to be conquered sits
@@ -261,22 +229,9 @@ window.onload = function() {
 		return false;
 	}
 
-/*   this.opponentJump = function (tile) {
-//      var pieceToRemove = this.canOpponentJump(tile.position);
-      //if there is a piece to be removed, remove it
-      if(pieceToRemove) {
-        pieces[pieceIndex].remove();
-        return true;
-      }
-      return false;
-    };*/
-    
     this.opponent_jump_regular = function (tile) {
-//    	console.log("checking for opponent to remove");		
-      //var pieceToRemove = this.canOpponentJump(tile.position);
       var pieceToRemove = this.can_opponent_jump_regular(tile.position);
       captured_y.push(pieceToRemove.position[0])
-      // captured_x.push(pieceToRemove.position[1])
         captured.push(pieceToRemove.position[1])
         captured.push(pieceToRemove.position[0])
 
@@ -319,23 +274,6 @@ window.onload = function() {
     this.element = element;
     //position in gameboard
     this.position = position;
-    //if tile is in range from the piece
-/*    this.inRange = function(piece) {
-      for(k of pieces)
-        if(k.position[0] == this.position[0] && k.position[1] == this.position[1]) return 'wrong';
-//      if(!piece.king && piece.player==1 && this.position[0] < piece.position[0]) return 'wrong';
-//      if(!piece.king && piece.player==2 && this.position[0] > piece.position[0]) return 'wrong';
-      if(dist(this.position[0], this.position[1], piece.position[0], piece.position[1]) == Math.sqrt(2)) {
-        //regular move
-        return 'regular';
-      } else if(dist(this.position[0], this.position[1], piece.position[0], piece.position[1]) == 2*Math.sqrt(2)) {
-        //jump move
-        return 'jump';
-      }
-      else { return "wrong";}
-    };*/
-    
-    
     this.inRange2 = function(piece){
 			if (piece.king == false) {
 //				console.log("checking range of normal piece");
@@ -348,7 +286,6 @@ window.onload = function() {
 				}
 //				if you want to jump
 				if(dist(this.position[0], this.position[1], piece.position[0], piece.position[1]) == 2*Math.sqrt(2)) {
-//        			console.log("you want to jump");
         			return 'jump';
       		}
 //      		if you want to make regular move forward
@@ -419,7 +356,6 @@ window.onload = function() {
       },
       //check if the location has an object
       isValidPlacetoMove: function (row, column) {
-          // console.log(row); console.log(column); console.log(this.board);
           if (row < 0 || row > 7 || column < 0 || column > 7) return false;
           if (this.board[row][column] == 0) {
               return true;
@@ -561,18 +497,6 @@ window.onload = function() {
       return -1;
     };
 
-  // var sendMove = function(whos_turn, piece, tile, all_board){
-  //       var latestMove = [piece.position[0], piece.position[1], tile.position[1], tile.position[1]]
-  // 		console.log("sending a message about a move");
-	// 	var data = {
-	// 	        board: all_board,
-  // 				player: whos_turn,
-  // 				p_pos: piece,
-  // 				t_pos: tile
-  //  	};
-  //  	socket.emit('moveMsg', data);
-  // };
-
   var sendMoveSequence = function(beginMove, destMove, captured){
         console.log("sending a message about a move sequence");
       var data = {
@@ -589,10 +513,8 @@ window.onload = function() {
           console.log("current move to make: ");
           console.log(param_list[0]);
           computer_move_piece(param_list[0], function () {
-              // if (param_list.length > 0) {
                   param_list.splice(0, 1);
                   move_with_sequence(param_list);
-              // }
           });
       }
       else {
@@ -655,40 +577,6 @@ window.onload = function() {
     };
 
 
-
-  // var computer_move_piece = function(data){
-  //     console.log(data);
-  //     // find piece to move
-  //     if (pieces[8].position[0] == data['py'] && pieces[8].position[1] == data['px']){
-  //         console.log("yes!")
-  //     }
-  //     for (i in pieces){
-  //         if (pieces[i].position[0] == data['py'] && pieces[i].position[1] == data['px']){
-  //             console.log("found piece")
-  //             for (j in tiles){
-  //                 if (tiles[j].position[0]==data['ty'] && tiles[j].position[1]==data['tx']){
-  //                         pieces[i].move(tiles[j]);
-  //
-  //                     // pieces[i].element.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
-  //                     //     console.log("piece moved");
-  //                     //     return;
-  //
-  //                     // });
-  //                         console.log("moving"+pieces[i].position[0]+" "+pieces[i].position[1]+" to "+tiles[j].position[0]+" "+tiles[j].position[1]);
-  //                     // Board.changePlayerTurn();
-  //                     return;
-  //                 }
-  //             }
-  //         }
-  //     }
-  //     // console.log("moving"+pieces[8].position[0]+" "+pieces[8].position[1]+" to "+tiles[12].position[0]+" "+tiles[12].position[1]);
-  //     // pieces[8].move(tiles[12]);
-  //     console.log("didn't find")
-  //     return;
-  //   };
-
-
-
   //move piece when tile is clicked
   $('.tile').on("click", function () {
     //make sure a piece is selected
@@ -699,12 +587,10 @@ window.onload = function() {
       //find the piece being selected
       var piece = pieces[$('.selected').attr("id")];
       //check if the tile is in range from the object
-//      var inRange = tile.inRange(piece);
 		var inRange = tile.inRange2(piece);
       if(inRange != 'wrong') {
         //if the move needed is jump, then move it but also check if another move can be made (double and triple jumps)
         if(inRange == 'jump') {
-//        	   if(piece.opponentJump(tile)) {
           if(piece.opponent_jump_regular(tile)) {
           	console.log("jump - moving piece");
               if (beginMove[0] == -1) {
@@ -714,14 +600,8 @@ window.onload = function() {
               destMove[0] = tile.position[0];
               destMove[1] = tile.position[1];
               piece.move(tile);
-            console.log("moved - checking for continuous capture");
-
               send_board = Board.str_board();
               console.log("oto board "+send_board);
-              // sendMove(piece.player, piece.position, tile.position, send_board);
-//				wyslac wiadomosc o ruchu 
-//				sendMove(piece.player, piece.position, tile.position);           
-            
             if(piece.can_jump_any_regular()) {
                // Board.changePlayerTurn(); //change back to original since another turn can be made
                piece.element.addClass('selected');
@@ -753,10 +633,6 @@ window.onload = function() {
             console.log(beginMove)
             send_board = Board.str_board();
             console.log("oto board "+send_board);
-              // sendMove(piece.player, piece.position, tile.position, send_board);
-//				wyslac wiadomosc o ruchu            
-//				sendMove(piece.player, piece.position, tile.position);
-
               sendMoveSequence(beginMove, destMove, captured)
             Board.changePlayerTurn()
               beginMove = [-1,-1]

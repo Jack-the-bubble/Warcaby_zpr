@@ -14,38 +14,38 @@ app.config['SECRET_KEY'] = 'habababa'
 socketio = SocketIO(app)
 
 
-
+'''
+funkcja zwraca obiekt do renderowania na stronie przegladarki
+@:returns zwraca opisany obiekt
+'''
 @app.route('/')
 def sessions():
 
 	return render_template('w3_test2.html', async_mode=socketio.async_mode)
 
+'''
+funkcja wywolywana w momencie uzyskania eventu od klienta, 
+uruchamia proces logiki komputera oraz wysyla ruch przeciwnika do klienta 
+'''
 @socketio.on('moveMsg')
 def move_on_server(data):
-	print("\n\n\n\nmaking move\n\n\n\n")
 	player_id = request.sid
 	events.handle_move(data, player_id)
 	
-	
+'''
+funkcja inicjuje gre po otrzymaniu polaczenia z klientem
+'''
 @socketio.on('con')
 def send_response(data):
-
-	# print("\n\n\n\nchecking sockets\n")
 	id = request.sid
-	# print(id)
-	# print("\n\n\n\n\n\n\n")
-	# emit('moveResp', id)
-
 	events.initialize_player(id)
 
-	# emit('resp', 'data')
-
+'''
+funkcja ma za zadanie usunac wsyzstkie obiekty zwiazane z gra w przypadku odlaczenia klienta
+'''
 @socketio.on('dis')
 def cut_player(data):
-	# print("\n\n\n\ndisdis  cut_player\n")
 	id = request.sid
-	# print(id)
-	# print("\n\n\n\n\n\n\n")
 	events.delete_player(id)
 
 @socketio.on('disconnect')

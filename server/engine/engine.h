@@ -47,6 +47,8 @@ BOOST_PYTHON_MODULE(engine){
 	        .def("convertAndSend", &Gra::convertAndSend)
 	        .def("assignID", &Gra::assignID)
 	        .def("getID", &Gra::getID)
+	        .def("klientGet", &Gra::klientGet)
+			.def("klientSet", &Gra::klientSet)
 	        ;
 }
 

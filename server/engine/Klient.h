@@ -5,6 +5,7 @@
 
 #include "Gracz.h"
 #include "Move.h"
+#include <iostream>
 
 #include <boost/python.hpp>
 using namespace boost::python;
@@ -49,6 +50,8 @@ public:
 	virtual int getID();
 	virtual void oponentMove(Move oponentMove);
 	virtual Move getBestMove();
+	void set(int i);
+	int get();
 	void convert_and_update(boost::python::list board);
 //<<<<<<< HEAD
 	void moveUpdate(int begMov_x,int  begMov_y,int destMov_x, int destMov_y, pyList cap);
@@ -57,6 +60,7 @@ public:
 	Move putLatestMove(boost::python::list move);
 	Move latestMove;
 //=======
+	int test;
 	int graczID; /**< identyfikator gracza */
 //>>>>>>> fc4467e51dbd79f216efd7794bb93c5f319c6835
 };
