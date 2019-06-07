@@ -11,6 +11,8 @@ using namespace boost::python;
 typedef boost::python::list pyList;
 //class Move{};
 
+
+
 class GraczWrap : public Gracz, public wrapper<Gracz>
 {
 public:
@@ -31,6 +33,12 @@ public:
 //	}
 };
 
+/**
+ *  \brief     Klasa klienta(uzytkownika) wykonujacego ruch
+ *  \author    Katarzyna Seweryn
+ *  \author    Marcin Skrzypkowski
+ *  \date      2019
+ */
 class Klient :
 	public Gracz
 {
@@ -42,12 +50,16 @@ public:
 	virtual void oponentMove(Move oponentMove);
 	virtual Move getBestMove();
 	void convert_and_update(boost::python::list board);
+//<<<<<<< HEAD
 	void moveUpdate(int begMov_x,int  begMov_y,int destMov_x, int destMov_y, pyList cap);
 	int planszaCopy[8][8];
 	bool ready = false;
 	int graczID;
 	Move putLatestMove(boost::python::list move);
 	Move latestMove;
+//=======
+	int graczID; /**< identyfikator gracza */
+//>>>>>>> fc4467e51dbd79f216efd7794bb93c5f319c6835
 };
 
 

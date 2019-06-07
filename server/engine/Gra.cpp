@@ -2,10 +2,19 @@
 
 using namespace std;
 
+/**
+	Konstruktor klasy Gra. Tworzy graczy z odpowiednimi identyfikatorami
 
+	@param i identyfikator klienta aplikacji frontendowej
+*/
 
 Gra::Gra()
 {
+//<<<<<<< HEAD
+//=======
+//	Komputer pl1(1);
+//	player1 = &pl1;
+//>>>>>>> fc4467e51dbd79f216efd7794bb93c5f319c6835
 
 
 Klient* pla = new Klient();
@@ -24,16 +33,20 @@ Gra::~Gra()
 {
 }
 
+/**
+	Funkcja pomagajaca w testowaniu aplikacji. Wypisuje aktualna plansze na konsole
+*/
+
 void Gra::drukuj()
 {
 	std:cout << "W|";
-	for (int j = 0; j < kolumny; ++j) std::cout << j << "|";
+	for (int j = 0; j < KOLUMNY; ++j) std::cout << j << "|";
 	std::cout << std::endl;
-	for (int i = kolumny - 1; i >= 0; --i)
+	for (int i = KOLUMNY - 1; i >= 0; --i)
 	{
 	
 		std::cout <<i<< "|";
-		for (int j = 0; j < kolumny; ++j)
+		for (int j = 0; j < KOLUMNY; ++j)
 		{
 			if (plansza.getPlansza(i, j) == 1)
 				std::cout << "O|";
@@ -49,12 +62,19 @@ void Gra::drukuj()
 	}
 }
 
+//<<<<<<< HEAD
 
 
+//=======
+/**
+	Glowna petla gry. Kontroluje przeplyw ruchow miedzy graczami, stan planszy i decyduje o koncu gry.
+*/
+//>>>>>>> fc4467e51dbd79f216efd7794bb93c5f319c6835
 void Gra::play()
 {
 	this->drukuj();
 
+//<<<<<<< HEAD
 //
 //	Klient* pla = new Klient();
 //	//Uzytkownik pl1(1);
@@ -67,6 +87,8 @@ void Gra::play()
 
 //	cout<<pla->getID()<<endl;
 
+//=======
+//>>>>>>> fc4467e51dbd79f216efd7794bb93c5f319c6835
 	while (!(plansza.isWin())) 
 	{
  		this->player1notify();
@@ -83,6 +105,9 @@ void Gra::play()
 	return;
 }
 
+/**
+	Funkcja wywolywana gdy gracz 1 ma wykonac ruch
+*/
 void Gra::player1notify()
 {
 
@@ -96,11 +121,15 @@ void Gra::player1notify()
 
 }
 
+/**
+	Funkcja wywolywana gdy gracz 1 ma wykonac ruch
+*/
 void Gra::player2notify()
 {
 	player2->update(plansza.plansza);
 
 }
+//<<<<<<< HEAD
 
 void Gra::klientMoveUpdate(int begMov_x,int  begMov_y,int destMov_x, int destMov_y, pyList cap){//(int begMov_x,int  begMov_y,int destMov_x, int destMov_y, int rowC, int colC) {
 	cout<<"calling client to create move"<<endl;
@@ -140,3 +169,5 @@ pyList Gra::convertAndSend(){
 //int main(){
 //	return 0;
 //}
+//=======
+//>>>>>>> fc4467e51dbd79f216efd7794bb93c5f319c6835

@@ -51,7 +51,7 @@ void Komputer::update(const int plansza[8][8])
 /**
 	Funkcja sprawdza czy dla danego pionka czy jest mozliwy ruch
 
-	@param id ID gracza wykonujacego ruch w danym posunieciu.
+	@param ID ID gracza wykonujacego ruch w danym posunieciu.
 	@return czy mozliwy ruch dla aktualnie rozpatrywanego pionka o wsp(w_,k_) w aktualnym posunieciu
 */
 
@@ -121,22 +121,22 @@ int Komputer::alfabetaFirst(int depth, int alpha, int beta)
 	
 	if (wygrana() != 0 || depth == 0 || pos == 0) return markBrd();  //koniec galezi ocen stan
 
-	int id = graczID;
+	int ID = graczID;
 
 	for (int i = 0; i < pos; ++i)
 	{
 		k_ = nextColumn[i];  //root
 		w_ = nextRow[i];  //root
 		std::list<Move> nextMoves;
-		if (boardCopy[w_][k_] == id)
+		if (boardCopy[w_][k_] == ID)
 		{
-			nextMoves = nextPositions(id, 1, k_, w_); //w prawo
-			nextMoves.splice(nextMoves.end(), nextPositions(id, -1, k_, w_)); //w lewo
+			nextMoves = nextPositions(ID, 1, k_, w_); //w prawo
+			nextMoves.splice(nextMoves.end(), nextPositions(ID, -1, k_, w_)); //w lewo
 		}
-		else if (boardCopy[w_][k_] == 2 * id)
+		else if (boardCopy[w_][k_] == 2 * ID)
 		{
-			nextMoves = nextKingPositions(id, 1, k_, w_); //w prawo
-			nextMoves.splice(nextMoves.end(), nextKingPositions(id, -1, k_, w_)); //w lewo
+			nextMoves = nextKingPositions(ID, 1, k_, w_); //w prawo
+			nextMoves.splice(nextMoves.end(), nextKingPositions(ID, -1, k_, w_)); //w lewo
 		}
 		
 
@@ -149,7 +149,7 @@ int Komputer::alfabetaFirst(int depth, int alpha, int beta)
 		{
 			makeMove(nextMoves.front());
 
-			int result = alfabeta(depth - 1, alpha, beta, -id);
+			int result = alfabeta(depth - 1, alpha, beta, -ID);
 			if (alpha < result) {
 				alpha = result;
 				bestMove = nextMoves.front();
@@ -177,7 +177,7 @@ int Komputer::alfabetaFirst(int depth, int alpha, int beta)
 	@param depth Glebokosc przeszukiwania drzewa gry.
 	@param alpha Najlepszy wynik dla gracza maksymalizujacego.
 	@param beta Najlepszy wynik dla gracza minimalizujacego.
-	@param id ID gracza wykonujacego ruch w danym posunieciu.
+	@param ID ID gracza wykonujacego ruch w danym posunieciu.
 
 
 	@return Heurystyka po wykonaniu najlepszego posuniecia dla gracza
@@ -295,7 +295,7 @@ int Komputer::wygrana()
 /**
 	Funkcja czy dla danego pionka czy jest mozliwe bicie w dowolnym kierunku.
 
-	@param id ID gracza wykonujacego ruch w danym posunieciu.
+	@param ID ID gracza wykonujacego ruch w danym posunieciu.
 	@param wiersz wiersz aktualnie rozpatrywanego pionka
 	@param kol kolumna aktualnie rozpatrywanego pionka
 	@return czy mozliwe bicie dla pionka o wsp(wiersz,kol) w aktualnym posunieciu
@@ -357,7 +357,7 @@ bool Komputer::bicie(int ID, int wiersz, int kol)
 /**
 	Funkcja czy dla danej damki czy jest mozliwe bicie w dowolnym kierunku.
 
-	@param id ID gracza wykonujacego ruch w danym posunieciu.
+	@param ID ID gracza wykonujacego ruch w danym posunieciu.
 	@param wiersz wiersz aktualnie rozpatrywanego pionka
 	@param kol kolumna aktualnie rozpatrywanego pionka
 	@return czy mozliwe bicie dla pionka o wsp(wiersz,kol) w aktualnym posunieciu
@@ -438,7 +438,7 @@ bool Komputer::bicieDamka(int ID, int wiersz, int kol)
 	Dla kazdego pionka gracza wykonujacego ruch sprawdza czy jest mozliwe bicie
 	jesli chociaz jeden ma mozliwe bicie to zwraca true
 
-	@param id ID gracza wykonujacego ruch w danym posunieciu.
+	@param ID ID gracza wykonujacego ruch w danym posunieciu.
 	@return czy jest przymus bicia w aktualnym posunieciu
 */
 bool Komputer::czyBicie(int ID )
@@ -541,7 +541,7 @@ int Komputer::markBrd()
 	Znajduje wszystkie mozliwe ruchy dla aktualnie rozpatrywanego pionka i zapisuje je do listy. 
 	Wywoluje sie rekurancyjnie w celu sprawdzenia mozliwych bic wielokrotnych.
 
-	@param id ID gracza wykonujacego ruch w danym posunieciu.
+	@param ID ID gracza wykonujacego ruch w danym posunieciu.
 	@param dir okresla kierunek ruchu ;1 ruch w prawo ;-1 ruch w lewo
 	@param k kolumna aktualnie rozpatrywanego pionka
 	@param w wiersz aktualnie rozpatrywanego pionka
@@ -670,6 +670,17 @@ std::list<Move> Komputer::nextPositions(int ID, int dir, int k, int w)
 	return myMoves;
 }
 
+
+/**
+	Znajduje wszystkie mozliwe ruchy dla aktualnie rozpatrywanej damki i zapisuje je do listy.
+	Wywoluje sie rekurancyjnie w celu sprawdzenia mozliwych bic wielokrotnych.
+
+	@param ID ID gracza wykonujacego ruch w danym posunieciu.
+	@param dir okresla kierunek ruchu ;1 ruch w prawo ;-1 ruch w lewo
+	@param k kolumna aktualnie rozpatrywanego pionka
+	@param w wiersz aktualnie rozpatrywanego pionka
+	@return lista mozliwych posuniec damki o wspolrzednych (w,k)
+*/
 std::list<Move> Komputer::nextKingPositions(int ID, int dir, int k, int w)
 {
 	std::list<Move> myMoves;
@@ -802,7 +813,7 @@ std::list<Move> Komputer::nextKingPositions(int ID, int dir, int k, int w)
 /**
 	Sprawdza mozliwosc najprostszego ruchu bez bicia w kierunku okreslonym przez dir.
 
-	@param id ID gracza wykonujacego ruch w danym posunieciu.
+	@param ID ID gracza wykonujacego ruch w danym posunieciu.
 	@param dir okresla kierunek ruchu ;1 ruch w prawo ;-1 ruch w lewo
 	@param k kolumna aktualnie rozpatrywanego pionka
 	@param w wiersz aktualnie rozpatrywanego pionka
@@ -814,6 +825,15 @@ bool Komputer::czyRuchBezBicia( int ID, int dir, int k, int w)
 		&& w + ID >= 0 && w + ID < SIZE);
 }
 
+/**
+	Sprawdza mozliwosc ruchu bez bicia do tylu dla damki
+
+	@param ID ID gracza wykonujacego ruch w danym posunieciu.
+	@param dir okresla kierunek ruchu ;1 ruch w prawo ;-1 ruch w lewo
+	@param k kolumna aktualnie rozpatrywanego pionka
+	@param w wiersz aktualnie rozpatrywanego pionka
+	@return true jesli jest mozliwy ruch
+*/
 bool Komputer::isKingMoveBack(int ID, int dir, int k, int w)
 {
 	return ((boardCopy[w][k] == 2*ID ) && k + dir * 1 < SIZE && k + dir * 1 >= 0 && boardCopy[w - ID * 1][k + dir * 1] == 0 && (w - ID*1) >= 0 && (w - ID) < SIZE);

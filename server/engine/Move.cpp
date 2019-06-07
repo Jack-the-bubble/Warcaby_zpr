@@ -29,6 +29,12 @@ Move::~Move()
 {
 }
 
+/**
+	Dodanie pionka zbitego w ruchu.
+
+	@param row wiersz zbitego pionka
+	@param col kolumna zbitego pionka
+*/
 void Move::addCaptured(int row, int col)
 {
 	capturedRow.push_back(row);

@@ -8,10 +8,18 @@
 #include "Komputer.h"
 #include "Move.h"
 #include <iostream>
+//<<<<<<< HEAD
 #include <boost/shared_ptr.hpp>
 
 typedef boost::shared_ptr<Klient> Gr;
 typedef boost::python::list pyList;
+//=======
+/**
+ *  \brief     Glowna klasa gry, jej metoda play jest petla glowna gry, kontroluje przeplyw ruchow i sprawdza terminalnosc planszy
+ *  \author    Katarzyna Seweryn
+ *  \date      2019
+ */
+//>>>>>>> fc4467e51dbd79f216efd7794bb93c5f319c6835
 class Gra
 {
 public:
@@ -27,11 +35,18 @@ public:
 	pyList convertAndSend();
 
 //private:
+//<<<<<<< HEAD
 	Plansza plansza;
-	Gr player3;
+//	Gr player3;
 	Gracz* player1;
 	Gracz* player2;
 	const int kolumny = 8;
+//=======
+	Plansza plansza;  /**< plansza gry   */
+	Gracz* player1;  /**< wskaznik na gracza 1 */
+	Gracz* player2;  /**< wskaznik na gracza 2 */
+	const int KOLUMNY = 8; /**< rozmiar planszy */
+//>>>>>>> fc4467e51dbd79f216efd7794bb93c5f319c6835
 };
 
 
