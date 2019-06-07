@@ -17,6 +17,7 @@ class Komputer :
 {
 public:
 	Komputer(int graczID_);
+	Komputer();
 	~Komputer();
 	virtual void update(const int plansza[8][8]);
 	virtual int getID();

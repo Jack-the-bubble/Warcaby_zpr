@@ -11,7 +11,8 @@
 //<<<<<<< HEAD
 #include <boost/shared_ptr.hpp>
 
-typedef boost::shared_ptr<Klient> Gr;
+typedef boost::shared_ptr<Komputer> Kom;
+typedef boost::shared_ptr<Klient> Kl;
 typedef boost::python::list pyList;
 //=======
 /**
@@ -36,15 +37,17 @@ public:
 
 //private:
 //<<<<<<< HEAD
-	Plansza plansza;
+//	Plansza plansza;
 //	Gr player3;
-	Gracz* player1;
-	Gracz* player2;
-	const int kolumny = 8;
+//	Gracz* player1;
+//	Gracz* player2;
+//	const int kolumny = 8;
 //=======
 	Plansza plansza;  /**< plansza gry   */
-	Gracz* player1;  /**< wskaznik na gracza 1 */
-	Gracz* player2;  /**< wskaznik na gracza 2 */
+	Kl player1;
+	Kom player2;
+//	Gracz* player1;  /**< wskaznik na gracza 1 */
+//	Gracz* player2;  /**< wskaznik na gracza 2 */
 	const int KOLUMNY = 8; /**< rozmiar planszy */
 //>>>>>>> fc4467e51dbd79f216efd7794bb93c5f319c6835
 };

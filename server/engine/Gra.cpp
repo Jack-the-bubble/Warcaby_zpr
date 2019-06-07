@@ -17,15 +17,21 @@ Gra::Gra()
 //>>>>>>> fc4467e51dbd79f216efd7794bb93c5f319c6835
 
 
-Klient* pla = new Klient();
+//Klient* pla = new Klient();
+
 	//Uzytkownik pl1(1);
 //	Klient pl1();
-	player1 = pla;
+//	player1 = pla;
 
-    Komputer* pl2 = new Komputer(-1);
+	player1 = Kl(new Klient);
+
+//    Komputer* pl2 = new Komputer(-1);
 //	Komputer pl2(-1);
 //	player2 = &pl2;
-    player2 = pl2;
+//    player2 = pl2;
+
+    player2 = Kom(new Komputer);
+
 }
 
 

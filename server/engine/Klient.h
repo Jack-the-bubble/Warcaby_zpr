@@ -54,7 +54,6 @@ public:
 	void moveUpdate(int begMov_x,int  begMov_y,int destMov_x, int destMov_y, pyList cap);
 	int planszaCopy[8][8];
 	bool ready = false;
-	int graczID;
 	Move putLatestMove(boost::python::list move);
 	Move latestMove;
 //=======

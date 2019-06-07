@@ -9,6 +9,7 @@ Komputer::Komputer(int graczID_)
 
 }
 
+Komputer::Komputer() :graczID(-1){}
 
 Komputer::~Komputer()
 {
@@ -170,7 +171,7 @@ int Komputer::alfabetaFirst(int depth, int alpha, int beta)
 	zadanej glebokosci przeszukiwania.
 	Parametry alfa oraz beta mowia o aktualnie znalezionej korzysci z danego ruchu dla obydwu graczy.
 	W celu wywolania funkcji konieczne jest takze podanie ID gracza wykonujacego w danej chwili ruch oraz
-	numer kolumny i wiersza w których umieszczony zostal zeton w poprzednim ruchu (w celu efektywnego sprawdzenia
+	numer kolumny i wiersza w ktï¿½rych umieszczony zostal zeton w poprzednim ruchu (w celu efektywnego sprawdzenia
 	czy po ruchu nie wystapil stan terminalny).
 
 
