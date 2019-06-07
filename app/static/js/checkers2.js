@@ -1,5 +1,9 @@
 window.onload = function() {
   var connectionID = -1
+    //  fields to send move to engine
+  var beginMove = [-1,-1]
+  var destMove = [-1,-1]
+  var captured = [-1,-1]
   //The initial setup
   var gameBoard = [
     [  0,  1,  0,  1,  0,  1,  0,  1 ],
@@ -41,6 +45,47 @@ window.onload = function() {
       this.element.css("backgroundImage", "url('/static/img/king"+this.player+".png')");
       this.king = true;
     }
+      //moves the piece
+      this.move_com = function (tile) {
+          this.element.removeClass('selected');
+          // if(!Board.isValidPlacetoMove(tile.position[0], tile.position[1])) {console.log("wrong move "+tile.position[0]+" "+tile.position[1]);
+          //     return false;
+          // }
+          //make sure piece doesn't go backwards if it's not a king
+          /*      if(this.player == 1 && this.king == false) {
+                  if(tile.position[0] < this.position[0]){
+                  return false;
+                  }
+                } else if (this.player == 2 && this.king == false) {
+                   if(tile.position[0] > this.position[0]) {
+                       return false;
+                        }
+                }*/
+          console.log("moving piece from server")
+
+
+          //remove the mark from Board.board and put it in the new spot
+          Board.board[this.position[0]][this.position[1]] = 0;
+          Board.board[tile.position[0]][tile.position[1]] = this.player;
+          this.position = [tile.position[0], tile.position[1]];
+          //change the css using board's dictionary
+
+          this.element.css('top', Board.dictionary[this.position[0]]);
+          this.element.css('left', Board.dictionary[this.position[1]]);
+          //   this.element.animate({'top':Board.dictionary[this.position[0]], 'left':Board.dictionary[this.position[1]]}, {duration:3000, easing:'linear'});
+          //   this.element.animate({'left':Board.dictionary[this.position[1]]}, {duration:"slow", easing:'linear'});
+
+          //if piece reaches the end of the row on opposite side crown it a king (can move all directions)
+          if(!this.king && (this.position[0] == 0 || this.position[0] == 7 )) {
+              this.makeKing();
+          }
+          // if (this.element.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend')){
+          console.log("piece moved");
+          // gotowe = true;
+          return true;
+          // }
+          // return true;
+      };
     //moves the piece
     this.move = function (tile) {
       this.element.removeClass('selected');
@@ -230,6 +275,11 @@ window.onload = function() {
 //    	console.log("checking for opponent to remove");		
       //var pieceToRemove = this.canOpponentJump(tile.position);
       var pieceToRemove = this.can_opponent_jump_regular(tile.position);
+      captured_y.push(pieceToRemove.position[0])
+      // captured_x.push(pieceToRemove.position[1])
+        captured.push(pieceToRemove.position[1])
+        captured.push(pieceToRemove.position[0])
+
       //if there is a piece to be removed, remove it
       if(pieceToRemove) {
         pieces[index].remove();
@@ -511,16 +561,28 @@ window.onload = function() {
       return -1;
     };
 
-  var sendMove = function(whos_turn, piece, tile, all_board){
-  		console.log("sending a message about a move");
-		var data = {
-		        board: all_board,
-  				player: whos_turn,
-  				p_pos: piece,
-  				t_pos: tile
-   	};
-   	socket.emit('moveMsg', data);
-  };
+  // var sendMove = function(whos_turn, piece, tile, all_board){
+  //       var latestMove = [piece.position[0], piece.position[1], tile.position[1], tile.position[1]]
+  // 		console.log("sending a message about a move");
+	// 	var data = {
+	// 	        board: all_board,
+  // 				player: whos_turn,
+  // 				p_pos: piece,
+  // 				t_pos: tile
+  //  	};
+  //  	socket.emit('moveMsg', data);
+  // };
+
+  var sendMoveSequence = function(beginMove, destMove, captured){
+        console.log("sending a message about a move sequence");
+      var data = {
+          begMov: beginMove,
+          destMov: destMove,
+          cap: captured
+      };
+      console.log(data)
+      socket.emit('moveMsg', data);
+    };
 
   var move_with_sequence = function(param_list){
       if (param_list.length > 0) {
@@ -549,6 +611,10 @@ window.onload = function() {
       }
       move_with_sequence(move_list);
       Board.changePlayerTurn();
+      beginMove = [-1,-1]
+      destMove = [-1,-1]
+      captured_x = []
+      captured_y = []
 
   });
 
@@ -562,7 +628,8 @@ window.onload = function() {
                 console.log("found piece")
                 for (j in tiles){
                     if (tiles[j].position[0]==data['ty'] && tiles[j].position[1]==data['tx']){
-                        pieces[i].move(tiles[j]);
+                        // pieces[i].move(tiles[j]);
+                        pieces[i].move_com(tiles[j]);
 
                         if (data.rx > -1 && data.rx <= 7){
                             console.log("removing from coordinates:"+data.rx+" "+data.ry);
@@ -619,7 +686,9 @@ window.onload = function() {
   //     console.log("didn't find")
   //     return;
   //   };
-  
+
+
+
   //move piece when tile is clicked
   $('.tile').on("click", function () {
     //make sure a piece is selected
@@ -638,12 +707,18 @@ window.onload = function() {
 //        	   if(piece.opponentJump(tile)) {
           if(piece.opponent_jump_regular(tile)) {
           	console.log("jump - moving piece");
-            piece.move(tile);
+              if (beginMove[0] == -1) {
+                  beginMove[0]=piece.position[0];
+                  beginMove[1]=piece.position[1];
+              }
+              destMove[0] = tile.position[0];
+              destMove[1] = tile.position[1];
+              piece.move(tile);
             console.log("moved - checking for continuous capture");
 
               send_board = Board.str_board();
               console.log("oto board "+send_board);
-              sendMove(piece.player, piece.position, tile.position, send_board);
+              // sendMove(piece.player, piece.position, tile.position, send_board);
 //				wyslac wiadomosc o ruchu 
 //				sendMove(piece.player, piece.position, tile.position);           
             
@@ -654,24 +729,39 @@ window.onload = function() {
                // exist continuous jump, you are not allowed to de-select this piece or select other pieces
                Board.continuousjump = true;
             } else {
+                sendMoveSequence(beginMove, destMove, captured)
+                // sendMoveSequence([1, 1], [2, 2], -1, -1)
               Board.changePlayerTurn()
-              
-//				wyslij wiadomosc o zakonczeniu ruchu gracza (np skonczyl bić)              
+                beginMove = [-1,-1]
+                destMove = [-1,-1]
+                captured = [-1,-1]
+//				wyslij wiadomosc o zakonczeniu ruchu gracza (np skonczyl bić)
               
             }
           }
           //if it's regular then move it if no jumping is available
         } else if(inRange == 'regular' && !Board.jumpexist) {
           if(!piece.canJumpAny()) {
+              if (beginMove[0] == -1) {
+                  beginMove[0]= 7- piece.position[0];
+                  beginMove[1]=piece.position[1];
+              }
+              destMove[0] = 7 -tile.position[0];
+              destMove[1] = tile.position[1];
             piece.move(tile);
+            console.log("data tuz przed wyslaniem");
+            console.log(beginMove)
             send_board = Board.str_board();
             console.log("oto board "+send_board);
-              sendMove(piece.player, piece.position, tile.position, send_board);
+              // sendMove(piece.player, piece.position, tile.position, send_board);
 //				wyslac wiadomosc o ruchu            
-//				sendMove(piece.player, piece.position, tile.position);               
-            
+//				sendMove(piece.player, piece.position, tile.position);
+
+              sendMoveSequence(beginMove, destMove, captured)
             Board.changePlayerTurn()
-            
+              beginMove = [-1,-1]
+              destMove = [-1,-1]
+              captured = [-1, -1]
 //				wyslac wiadomosc o zakonczeniu ruchu gracza            
             
           } else {

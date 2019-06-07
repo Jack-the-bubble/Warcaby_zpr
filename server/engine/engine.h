@@ -16,9 +16,10 @@ BOOST_PYTHON_MODULE(engine){
 			;
 
 
-	class_<Klient, bases<Gracz> >("Klient", init<int>())
+	class_<Klient, bases<Gracz> >("Klient", init</*int*/>())
 			.def("convert_and_update", &Klient::convert_and_update)
 			.def("oponentMove", &Klient::oponentMove)
+//			.def("moveUpdate", &Klient::moveUpdate)
 			;
 
 	class_<Move>("Move", init<>())
@@ -35,11 +36,15 @@ BOOST_PYTHON_MODULE(engine){
 
 	class_<Komputer, bases<Gracz> >("Komputer", init<int>());
 
-	class_<Gra>("Gra", init<int>())
+	class_<Gra>("Gra", init</*int*/>())
 	        .def("drukuj", &Gra::drukuj)
 	        .def("play", &Gra::play)
 	        .def("player1notify", &Gra::player1notify)
 	        .def("player2notify", &Gra::player2notify)
+	        .def("klientMoveUpdate", &Gra::klientMoveUpdate)
+	        .def("computerUpdate", &Gra::computerUpdate)
+	        .def("changePlansza", &Gra::changePlansza)
+	        .def("convertAndSend", &Gra::convertAndSend)
 	        ;
 }
 

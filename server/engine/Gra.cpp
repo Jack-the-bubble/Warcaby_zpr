@@ -4,13 +4,19 @@ using namespace std;
 
 
 
-Gra::Gra(int i)
+Gra::Gra()
 {
-		Komputer pl1(1);
-	player1 = &pl1;
 
-	Komputer pl2(-1);
-	player2 = &pl2;
+
+Klient* pla = new Klient();
+	//Uzytkownik pl1(1);
+//	Klient pl1();
+	player1 = pla;
+
+    Komputer* pl2 = new Komputer(-1);
+//	Komputer pl2(-1);
+//	player2 = &pl2;
+    player2 = pl2;
 }
 
 
@@ -43,23 +49,31 @@ void Gra::drukuj()
 	}
 }
 
+
+
 void Gra::play()
 {
 	this->drukuj();
 
-	//Uzytkownik pl1(1);
-//	Komputer pl1(1);
-//	player1 = &pl1;
+//
+//	Klient* pla = new Klient();
+//	//Uzytkownik pl1(1);
+////	Klient pl1();
+//	player1 = pla;
 //
 //	Komputer pl2(-1);
 //	player2 = &pl2;
 
+
+//	cout<<pla->getID()<<endl;
 
 	while (!(plansza.isWin())) 
 	{
  		this->player1notify();
 		plansza.makeMove(player1->getBestMove());
 		this->drukuj();
+		int i;
+		scanf("jo: %d", &i);
 		this->player2notify();
 		//player1->oponentMove(player2->getBestMove()); 
 		plansza.makeMove(player2->getBestMove());
@@ -72,7 +86,13 @@ void Gra::play()
 void Gra::player1notify()
 {
 
+	this->drukuj();
+//	cout<<player3->getID()<<endl;
+//	cout<<player1->ready<<endl;
+//	cout<<player1->getID()<<endl;
+	cout<<player1->getID()<<endl;
 	player1->update(plansza.plansza);
+
 
 }
 
@@ -82,6 +102,41 @@ void Gra::player2notify()
 
 }
 
-int main(){
-	return 0;
+void Gra::klientMoveUpdate(int begMov_x,int  begMov_y,int destMov_x, int destMov_y, pyList cap){//(int begMov_x,int  begMov_y,int destMov_x, int destMov_y, int rowC, int colC) {
+	cout<<"calling client to create move"<<endl;
+	int roC = boost::python::extract<int>(cap[0]);
+	int coC = boost::python::extract<int>(cap[1]);
+	player1->moveUpdate(begMov_x, begMov_y, destMov_x, destMov_y,cap);
 }
+
+void Gra::computerUpdate() {
+	plansza.makeMove(player2->getBestMove());
+}
+
+void Gra::changePlansza() {
+	cout<<"changing plansza"<<endl;
+	Move pom = player1->getBestMove();
+	cout<<"moving from "<<pom.from[0]<< "point"<<endl;
+	plansza.makeMove(pom);
+}
+
+pyList Gra::convertAndSend(){
+    Move move = player2->getBestMove();
+    plansza.makeMove(move);
+    pyList list;
+    list.append(move.from[0]);
+	list.append(move.from[1]);
+	list.append(move.to[0]);
+	list.append(move.to[1]);
+	int i = 0;
+	while (i != move.capturedRow.size()){
+		list.append(move.capturedRow[i]);
+		list.append(move.capturedCol[i]);
+		i++;
+	}
+    return list;
+}
+
+//int main(){
+//	return 0;
+//}

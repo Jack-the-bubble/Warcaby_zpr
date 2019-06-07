@@ -8,7 +8,7 @@
 
 #include <boost/python.hpp>
 using namespace boost::python;
-
+typedef boost::python::list pyList;
 //class Move{};
 
 class GraczWrap : public Gracz, public wrapper<Gracz>
@@ -35,16 +35,19 @@ class Klient :
 	public Gracz
 {
 public:
-	Klient(int);
+	Klient();
 	~Klient();
 	virtual void update(const int plansza[8][8]);
 	virtual int getID();
 	virtual void oponentMove(Move oponentMove);
 	virtual Move getBestMove();
 	void convert_and_update(boost::python::list board);
+	void moveUpdate(int begMov_x,int  begMov_y,int destMov_x, int destMov_y, pyList cap);
 	int planszaCopy[8][8];
 	bool ready = false;
 	int graczID;
+	Move putLatestMove(boost::python::list move);
+	Move latestMove;
 };
 
 

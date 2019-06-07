@@ -8,19 +8,27 @@
 #include "Komputer.h"
 #include "Move.h"
 #include <iostream>
+#include <boost/shared_ptr.hpp>
 
+typedef boost::shared_ptr<Klient> Gr;
+typedef boost::python::list pyList;
 class Gra
 {
 public:
-	Gra(int i);
+	Gra();
 	~Gra();
 	void drukuj();
 	void play();
+	void klientMoveUpdate(int begMov_x,int  begMov_y,int destMov_x, int destMov_y, pyList cap);
+	void computerUpdate();
 	void player1notify();
+	void changePlansza();
 	void player2notify();
+	pyList convertAndSend();
 
 //private:
 	Plansza plansza;
+	Gr player3;
 	Gracz* player1;
 	Gracz* player2;
 	const int kolumny = 8;
