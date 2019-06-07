@@ -33,6 +33,9 @@ public:
 	void player1notify();
 	void changePlansza();
 	void player2notify();
+	void assignID(int i);
+	void reset();
+	int getID();
 	pyList convertAndSend();
 
 //private:
@@ -46,6 +49,7 @@ public:
 	Plansza plansza;  /**< plansza gry   */
 	Kl player1;
 	Kom player2;
+	int ID_;
 //	Gracz* player1;  /**< wskaznik na gracza 1 */
 //	Gracz* player2;  /**< wskaznik na gracza 2 */
 	const int KOLUMNY = 8; /**< rozmiar planszy */

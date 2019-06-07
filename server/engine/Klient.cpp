@@ -59,9 +59,11 @@ void Klient::oponentMove(Move oponentMove)
 void Klient::moveUpdate(int begMov_x,int  begMov_y,int destMov_x, int destMov_y, pyList cap) {
 	std::cout<<"creating move "<<std::endl;
 	Move move= Move(begMov_y, begMov_x, destMov_y, destMov_x, 1, boost::python::extract<int>(cap[0]), boost::python::extract<int>(cap[1]));
+
 	for (int i = 0; i < boost::python::len(cap)-2; i+=2) {
 		move.addCaptured(boost::python::extract<int>(cap[i+2]), boost::python::extract<int>(cap[i+3]));
 	}
+	latestMove.printMove();
 	Klient::latestMove = move;//Move(begMov[0], begMov[1], destMov[0], destMov[1], 1, rowC, colC);
 }
 

@@ -4,6 +4,7 @@
 #define __MOVE_H__
 
 #include<vector>
+#include <iostream>
 
 
 /**
@@ -25,6 +26,7 @@ public:
 	void addCaptured(int row, int col);
 	void operator= (Move);
 	void createKing();
+	void printMove();
 	bool kingCreate = false;
 };
 

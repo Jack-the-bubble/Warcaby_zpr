@@ -4,6 +4,7 @@
 
 #include "Move.h"
 #include <boost/python.hpp>
+#include <iostream>
 typedef boost::python::list pyList;
 
 /**
@@ -18,6 +19,7 @@ public:
 	Gracz();
 	virtual ~Gracz();
 	virtual int getID() = 0;
+	void drukuj(const int board[8][8]);
 	virtual void update (const int plansza[8][8]) = 0;
 	virtual Move getBestMove() = 0;
 	virtual void oponentMove(Move oponentMove) {};

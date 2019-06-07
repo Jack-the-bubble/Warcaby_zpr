@@ -1,4 +1,6 @@
 #include "Komputer.h"
+#include <iostream>
+
 using namespace std;
 
 
@@ -32,7 +34,7 @@ void Komputer::update(const int plansza[8][8])
 	bestMove.ID = 0;
 
 	
-
+	drukuj(plansza);
 	for (int i = 0; i < SIZE; ++i)
 	{
 		for (int j = 0; j < SIZE; ++j)
@@ -42,9 +44,9 @@ void Komputer::update(const int plansza[8][8])
 			else if (boardCopy[i][j] == -graczID || boardCopy[i][j] == -2*graczID) ++oponentCnt;
 		}
 	}
+	drukuj(boardCopy);
 
 	alfabetaFirst(depthMax, -1000000, 1000000);
-
 	if(bestMove.ID != 0) makeMove(bestMove);
 }
 
@@ -97,7 +99,8 @@ bool Komputer::possibleMoves(int ID)
 
 int Komputer::alfabetaFirst(int depth, int alpha, int beta)
 {
-	
+	cout<<"looking for best move from computer"<<endl;
+	drukuj(boardCopy);
 	czyBicie(graczID);
 	int pos = 0;
 	int nextColumn[12];
@@ -123,6 +126,7 @@ int Komputer::alfabetaFirst(int depth, int alpha, int beta)
 	if (wygrana() != 0 || depth == 0 || pos == 0) return markBrd();  //koniec galezi ocen stan
 
 	int ID = graczID;
+	std::cout<<"kolej gracza "<<ID<<std::endl;
 
 	for (int i = 0; i < pos; ++i)
 	{
@@ -144,22 +148,30 @@ int Komputer::alfabetaFirst(int depth, int alpha, int beta)
 		if (pos == 1 && nextMoves.size() == 1)
 		{
 			bestMove = nextMoves.front();
+			cout<<"moving from "<<bestMove.from[0] <<" "<<bestMove.from[1]<< " point to "<<bestMove.to[0] <<" "<<bestMove.to[1]<<endl;
+
+
 			return 0;
 		}
 		while (!nextMoves.empty())
 		{
+
 			makeMove(nextMoves.front());
 
 			int result = alfabeta(depth - 1, alpha, beta, -ID);
+			cout<<"result = "<<result<<", alfa = "<<alpha<<endl;
 			if (alpha < result) {
 				alpha = result;
+				cout<<"assigning best move"<<endl;
 				bestMove = nextMoves.front();
+				cout<<"moving from "<<bestMove.from[0] <<" "<<bestMove.from[1]<< " point to "<<bestMove.to[0] <<" "<<bestMove.to[1]<<endl;
 			}
 			rollBackMove(nextMoves.front());
 			nextMoves.pop_front();
 		}
 			
 	}
+	cout<<"best move is "<<bestMove.from[0] <<" "<<bestMove.from[1]<< " point to "<<bestMove.to[0] <<" "<<bestMove.to[1]<<endl;
 	return 0;
 }
 
@@ -187,7 +199,7 @@ int Komputer::alfabetaFirst(int depth, int alpha, int beta)
 int Komputer::alfabeta(int depth, int alpha, int beta, int ID)
 {	
 	biciePossible = false;
-
+	std::cout<<"kolej gracza "<<ID<<std::endl;
 	czyBicie(ID);
 	int nextColumn[12];
 	int nextRow[12];
@@ -223,7 +235,7 @@ int Komputer::alfabeta(int depth, int alpha, int beta, int ID)
 
 			std::list<Move> nextMoves = nextPositions(ID, 1, k_, w_); //w prawo
 			nextMoves.splice(nextMoves.end(), nextPositions(ID, -1, k_, w_)); //w lewo
-
+			for_each(nextMoves.begin(), nextMoves.end(), [](Move a){a.printMove();});
 
 			while (!nextMoves.empty())
 			{
@@ -239,6 +251,7 @@ int Komputer::alfabeta(int depth, int alpha, int beta, int ID)
 					return beta;
 			}
 		}
+		cout<<"alpha z alphabeta: "<<alpha<<endl;
 	return alpha;
 	}
 
@@ -475,6 +488,8 @@ bool Komputer::czyBicie(int ID )
 
 int Komputer::markBrd()
 {
+	cout<<"plansza z oceny"<<endl;
+	drukuj(boardCopy);
 	int myCnt2 = 0;
 	int oponentCnt2 = 0;
 	

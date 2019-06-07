@@ -45,6 +45,8 @@ BOOST_PYTHON_MODULE(engine){
 	        .def("computerUpdate", &Gra::computerUpdate)
 	        .def("changePlansza", &Gra::changePlansza)
 	        .def("convertAndSend", &Gra::convertAndSend)
+	        .def("assignID", &Gra::assignID)
+	        .def("getID", &Gra::getID)
 	        ;
 }
 

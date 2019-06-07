@@ -31,12 +31,14 @@ Gra::Gra()
 //    player2 = pl2;
 
     player2 = Kom(new Komputer);
+//    plansza = P(new Plansza);
 
 }
 
 
 Gra::~Gra()
 {
+
 }
 
 /**
@@ -151,13 +153,14 @@ void Gra::computerUpdate() {
 void Gra::changePlansza() {
 	cout<<"changing plansza"<<endl;
 	Move pom = player1->getBestMove();
-	cout<<"moving from "<<pom.from[0]<< "point"<<endl;
+	cout<<"moving from "<<pom.from[0] <<" "<<pom.from[1]<< " point to "<<pom.to[0] <<" "<<pom.to[1]<<endl;
 	plansza.makeMove(pom);
 }
 
 pyList Gra::convertAndSend(){
     Move move = player2->getBestMove();
-    plansza.makeMove(move);
+    cout<<"move to make from cpp: "<<move.from[0]<<endl;
+    plansza.makeMove(player2->getBestMove());
     pyList list;
     list.append(move.from[0]);
 	list.append(move.from[1]);
@@ -177,3 +180,11 @@ pyList Gra::convertAndSend(){
 //}
 //=======
 //>>>>>>> fc4467e51dbd79f216efd7794bb93c5f319c6835
+void Gra::assignID(int i){
+	ID_ = i;
+}
+
+int Gra::getID(){
+	return ID_;
+}
+

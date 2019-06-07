@@ -14,6 +14,7 @@ app.config['SECRET_KEY'] = 'habababa'
 socketio = SocketIO(app)
 
 
+
 @app.route('/')
 def sessions():
 

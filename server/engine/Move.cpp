@@ -57,3 +57,7 @@ void Move::createKing()
 {
 	ID = 2 * ID;
 }
+
+void Move::printMove() {
+	std::cout<<"moving from "<<from[0] <<" "<<from[1]<< " point to "<<to[0] <<" "<<to[1]<<std::endl;
+}
