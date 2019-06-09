@@ -18,8 +18,15 @@ public:
 	bool isWin();
 	int plansza[8][8];  /**< Glowna plansza gry */
 	const int getPlansza(int, int);
-private:	
-	const int KOLUMNY = 8; /**< Rozmiar planszy */
+	int bicie(int, int,int,int,int); //usuwa zbity pionek
+	int getPionkiCzarne();
+	int getPionkiBiale();
+	bool damka(int, int, int);
+private:
+	int pionkiBiale;   //pionki gracza o ID = 1
+	int pionkiCzarne;  //pionki gracza o ID = -1
+	const int KOLUMNY = 8;/**< Rozmiar planszy */
+	bool damkaDone = false;
 };
 
 #endif

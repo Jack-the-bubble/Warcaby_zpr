@@ -256,6 +256,15 @@ window.onload = function() {
         $('#player1').append("<div class='capturedPiece'></div>");
         Board.score.player1 += 1;
       }
+      if (captured[0] == -1){
+          captured[0] = 7-this.position[0];
+          captured[1] = this.position[1];
+      }
+      else {
+          captured.push(7-this.position[0]);
+          captured.push(this.position[1]);
+      }
+
       Board.board[this.position[0]][this.position[1]] = 0;
       //reset position so it doesn't get picked up by the for loop in the canOpponentJump method
       this.position = [];
@@ -594,10 +603,10 @@ window.onload = function() {
           if(piece.opponent_jump_regular(tile)) {
           	console.log("jump - moving piece");
               if (beginMove[0] == -1) {
-                  beginMove[0]=piece.position[0];
+                  beginMove[0]=7-piece.position[0];
                   beginMove[1]=piece.position[1];
               }
-              destMove[0] = tile.position[0];
+              destMove[0] = 7-tile.position[0];
               destMove[1] = tile.position[1];
               piece.move(tile);
               send_board = Board.str_board();

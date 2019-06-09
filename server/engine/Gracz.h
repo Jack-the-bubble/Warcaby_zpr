@@ -23,13 +23,11 @@ public:
 	virtual void update (const int plansza[8][8]) = 0;
 	virtual Move getBestMove() = 0;
 	virtual void oponentMove(Move oponentMove) {};
-//<<<<<<< HEAD
+	virtual void set(int i) {};
+	int get() {};
 	virtual void moveUpdate(int begMov_x,int  begMov_y,int destMov_x, int destMov_y, pyList cap) {};
-//=======
 	int boardCopy[8][8]; /**< plansza gry przekazana do analizy dla gracza */
-	const int SIZE = 8; /**< rozmiar planszy */
-//>>>>>>> fc4467e51dbd79f216efd7794bb93c5f319c6835
-
+	const int size_ = 8; /**< rozmiar planszy */
 };
 
 #endif

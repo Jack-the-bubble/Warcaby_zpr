@@ -1,17 +1,14 @@
 #include "Komputer.h"
-#include <iostream>
-
 using namespace std;
 
 
-Komputer::Komputer(int graczID_)
+Komputer::Komputer()
 {
-	graczID = graczID_;
-	
+	graczID =-1;
+	myCnt = oponentCnt = 12;
 
 }
 
-Komputer::Komputer() :graczID(-1){}
 
 Komputer::~Komputer()
 {
@@ -23,7 +20,7 @@ int Komputer::getID()
 }
 
 /**
-	Funkcja wywolywana przy przekazaniu ruchu dla gracza. 
+	Funkcja wywolywana przy przekazaniu ruchu dla gracza.
 	Kopiuje aktualna zawartosc planszy
 	Wywoluje algorytm znajdujacy najlepsze dla gracza posuniecie
 
@@ -32,22 +29,24 @@ int Komputer::getID()
 void Komputer::update(const int plansza[8][8])
 {
 	bestMove.ID = 0;
+	myCnt = 0;
+	oponentCnt = 0;
 
-	
-	drukuj(plansza);
-	for (int i = 0; i < SIZE; ++i)
+
+	for (int i = 0; i < size_; ++i)
 	{
-		for (int j = 0; j < SIZE; ++j)
+		for (int j = 0; j < size_; ++j)
 		{
 			boardCopy[i][j] = plansza[i][j];
-			if (boardCopy[i][j] == graczID || boardCopy[i][j] == 2*graczID) ++myCnt;
-			else if (boardCopy[i][j] == -graczID || boardCopy[i][j] == -2*graczID) ++oponentCnt;
+
+			if (boardCopy[i][j] == graczID || boardCopy[i][j] == 2 * graczID) ++myCnt;
+			if (boardCopy[i][j] == -graczID || boardCopy[i][j] == 2 * (-graczID)) ++oponentCnt;
+
 		}
 	}
-	drukuj(boardCopy);
+
 	alfabetaFirst(depthMax, -1000000, 1000000);
-	bestMove.printMove();
-	cout<<"wyjscie z update"<<endl;
+
 	if(bestMove.ID != 0) makeMove(bestMove);
 }
 
@@ -55,7 +54,7 @@ void Komputer::update(const int plansza[8][8])
 /**
 	Funkcja sprawdza czy dla danego pionka czy jest mozliwy ruch
 
-	@param ID ID gracza wykonujacego ruch w danym posunieciu.
+	@param id ID gracza wykonujacego ruch w danym posunieciu.
 	@return czy mozliwy ruch dla aktualnie rozpatrywanego pionka o wsp(w_,k_) w aktualnym posunieciu
 */
 
@@ -64,15 +63,11 @@ bool Komputer::possibleMoves(int ID)
 	bool moves = false;
 
 
-	if (biciePossible)
-	{
-		if (boardCopy[w_][k_] == ID) moves = bicie(ID, w_, k_);
-		else if (boardCopy[w_][k_] == 2*ID) moves = bicieDamka(ID, w_, k_);
-	}
+	if(biciePossible) moves = bicie(ID, w_, k_);
 
 	else  //jesli nie ma bicia
 	{
-		if (czyRuchBezBicia(ID, 1, k_, w_) || czyRuchBezBicia( ID, -1, k_, w_) || isKingMoveBack( ID, 1, k_, w_) || isKingMoveBack(ID, -1, k_, w_))
+		if (czyRuchBezBicia(ID, 1, k_, w_) || czyRuchBezBicia( ID, -1, k_, w_))
 		{
 			moves = true;
 		}
@@ -100,19 +95,18 @@ bool Komputer::possibleMoves(int ID)
 
 int Komputer::alfabetaFirst(int depth, int alpha, int beta)
 {
-	cout<<"looking for best move from computer"<<endl;
-	drukuj(boardCopy);
+
 	czyBicie(graczID);
 	int pos = 0;
 	int nextColumn[12];
 	int nextRow[12];
-	for (int i = 0; i < SIZE; ++i)
+	for (int i = 0; i < size_; ++i)
 	{
-		for (int j = 0; j < SIZE; ++j)
+		for (int j = 0; j < size_; ++j)
 		{
 			k_ = j;
 			w_ = i;
-			if (boardCopy[i][j] == graczID || boardCopy[i][j] == 2*graczID)
+			if (boardCopy[i][j] == graczID)
 			{
 				if (possibleMoves(graczID))
 				{
@@ -123,56 +117,39 @@ int Komputer::alfabetaFirst(int depth, int alpha, int beta)
 			}
 		}
 	}
-	
+
 	if (wygrana() != 0 || depth == 0 || pos == 0) return markBrd();  //koniec galezi ocen stan
 
-	int ID = graczID;
-	std::cout<<"kolej gracza "<<ID<<std::endl;
+	int id = graczID;
 
 	for (int i = 0; i < pos; ++i)
 	{
 		k_ = nextColumn[i];  //root
 		w_ = nextRow[i];  //root
-		std::list<Move> nextMoves;
-		if (boardCopy[w_][k_] == ID)
-		{
-			nextMoves = nextPositions(ID, 1, k_, w_); //w prawo
-			nextMoves.splice(nextMoves.end(), nextPositions(ID, -1, k_, w_)); //w lewo
-		}
-		else if (boardCopy[w_][k_] == 2 * ID)
-		{
-			nextMoves = nextKingPositions(ID, 1, k_, w_); //w prawo
-			nextMoves.splice(nextMoves.end(), nextKingPositions(ID, -1, k_, w_)); //w lewo
-		}
-		
+
+		std::list<Move> nextMoves = nextPositions( id, 1, k_, w_); //w prawo
+		std::list<Move> left = nextPositions( id, -1, k_, w_);
+		nextMoves.splice(nextMoves.end(),left); //w lewo
 
 		if (pos == 1 && nextMoves.size() == 1)
 		{
 			bestMove = nextMoves.front();
-			cout<<"moving from "<<bestMove.from[0] <<" "<<bestMove.from[1]<< " point to "<<bestMove.to[0] <<" "<<bestMove.to[1]<<endl;
-
-
 			return 0;
 		}
 		while (!nextMoves.empty())
 		{
-
 			makeMove(nextMoves.front());
 
-			int result = alfabeta(depth - 1, alpha, beta, -ID);
-			cout<<"result = "<<result<<", alfa = "<<alpha<<endl;
+			int result = alfabeta(depth - 1, alpha, beta, -id);
 			if (alpha < result) {
 				alpha = result;
-				cout<<"assigning best move"<<endl;
 				bestMove = nextMoves.front();
-				cout<<"moving from "<<bestMove.from[0] <<" "<<bestMove.from[1]<< " point to "<<bestMove.to[0] <<" "<<bestMove.to[1]<<endl;
 			}
 			rollBackMove(nextMoves.front());
 			nextMoves.pop_front();
 		}
-			
+
 	}
-	cout<<"best move is "<<bestMove.from[0] <<" "<<bestMove.from[1]<< " point to "<<bestMove.to[0] <<" "<<bestMove.to[1]<<endl;
 	return 0;
 }
 
@@ -191,23 +168,23 @@ int Komputer::alfabetaFirst(int depth, int alpha, int beta)
 	@param depth Glebokosc przeszukiwania drzewa gry.
 	@param alpha Najlepszy wynik dla gracza maksymalizujacego.
 	@param beta Najlepszy wynik dla gracza minimalizujacego.
-	@param ID ID gracza wykonujacego ruch w danym posunieciu.
+	@param id ID gracza wykonujacego ruch w danym posunieciu.
 
 
 	@return Heurystyka po wykonaniu najlepszego posuniecia dla gracza
 			wykonujacego ruch w danej chwili.
 */
 int Komputer::alfabeta(int depth, int alpha, int beta, int ID)
-{	
+{
 	biciePossible = false;
-	std::cout<<"kolej gracza "<<ID<<std::endl;
+
 	czyBicie(ID);
 	int nextColumn[12];
 	int nextRow[12];
 	int pos = 0;
-	for (int i = 0; i < SIZE; ++i)
+	for (int i = 0; i < size_; ++i)
 	{
-		for (int j = 0; j < SIZE; ++j)
+		for (int j = 0; j < size_; ++j)
 		{
 			k_ = j;
 			w_ = i;
@@ -235,8 +212,9 @@ int Komputer::alfabeta(int depth, int alpha, int beta, int ID)
 			w_ = nextRow[i];  //root
 
 			std::list<Move> nextMoves = nextPositions(ID, 1, k_, w_); //w prawo
-			nextMoves.splice(nextMoves.end(), nextPositions(ID, -1, k_, w_)); //w lewo
-			for_each(nextMoves.begin(), nextMoves.end(), [](Move a){a.printMove();});
+			std::list<Move> left = nextPositions(ID, -1, k_, w_);
+			nextMoves.splice(nextMoves.end(), left); //w lewo
+
 
 			while (!nextMoves.empty())
 			{
@@ -252,7 +230,6 @@ int Komputer::alfabeta(int depth, int alpha, int beta, int ID)
 					return beta;
 			}
 		}
-		cout<<"alpha z alphabeta: "<<alpha<<endl;
 	return alpha;
 	}
 
@@ -264,7 +241,8 @@ int Komputer::alfabeta(int depth, int alpha, int beta, int ID)
 			w_ = nextRow[i];  //root
 
 			std::list<Move> nextMoves = nextPositions(ID, 1, k_, w_); //w prawo
-			nextMoves.splice(nextMoves.end(), nextPositions(ID, -1, k_, w_)); //w lewo
+			std::list<Move> left = nextPositions(ID, -1, k_, w_);
+			nextMoves.splice(nextMoves.end(), left ); //w lewo
 
 
 			while (!nextMoves.empty())
@@ -292,11 +270,11 @@ int Komputer::alfabeta(int depth, int alpha, int beta, int ID)
 */
 int Komputer::wygrana()
 {
-	
+
 	int cnt1 = 0, cnt2 = 0;
-	for (int i = 0; i < SIZE; ++i)
+	for (int i = 0; i < size_; ++i)
 	{
-		for (int j = 0; j < SIZE; ++j)
+		for (int j = 0; j < size_; ++j)
 		{
 			if (graczID * boardCopy[i][j] >= 1 ) cnt1++;
 			if (graczID * boardCopy[i][j] <= -1) cnt2++;
@@ -310,7 +288,7 @@ int Komputer::wygrana()
 /**
 	Funkcja czy dla danego pionka czy jest mozliwe bicie w dowolnym kierunku.
 
-	@param ID ID gracza wykonujacego ruch w danym posunieciu.
+	@param id ID gracza wykonujacego ruch w danym posunieciu.
 	@param wiersz wiersz aktualnie rozpatrywanego pionka
 	@param kol kolumna aktualnie rozpatrywanego pionka
 	@return czy mozliwe bicie dla pionka o wsp(wiersz,kol) w aktualnym posunieciu
@@ -319,9 +297,9 @@ bool Komputer::bicie(int ID, int wiersz, int kol)
 {
 
 
-	if (kol-2 >= 0 && (wiersz + ID * 2) >= 0 && (wiersz + ID * 2) < SIZE)
+	if (kol-2 >= 0 && (wiersz + ID * 2) >= 0 && (wiersz + ID * 2) < size_)
 	{
-		if (boardCopy[wiersz + ID * 1][kol - 1] == -(ID) || boardCopy[wiersz + ID * 1][kol - 1] == -(2*ID))
+		if (boardCopy[wiersz + ID * 1][kol - 1] == -(ID))
 		{
 			if (boardCopy[wiersz + ID * 2][kol - 2] == 0)
 			{
@@ -330,9 +308,9 @@ bool Komputer::bicie(int ID, int wiersz, int kol)
 		}
 	}
 
-	if (kol+2 < SIZE && (wiersz + ID * 2) >= 0 && (wiersz + ID * 2) < SIZE)
+	if (kol+2 < size_ && (wiersz + ID * 2) >= 0 && (wiersz + ID * 2) < size_)
 	{
-		if (boardCopy[wiersz + ID * 1][kol + 1] == -(ID) || boardCopy[wiersz + ID * 1][kol + 1] == -(2*ID))
+		if (boardCopy[wiersz + ID * 1][kol + 1] == -(ID))
 		{
 			if (boardCopy[wiersz + ID * 2][kol + 2] == 0)
 			{
@@ -344,9 +322,9 @@ bool Komputer::bicie(int ID, int wiersz, int kol)
 
 
 	//bicia do tylu
-	if (kol - 2 >= 0 && (wiersz - ID * 2) >= 0 && (wiersz - ID * 2) < SIZE)
+	if (kol - 2 >= 0 && (wiersz - ID * 2) >= 0 && (wiersz - ID * 2) < size_)
 	{
-		if (boardCopy[wiersz - ID * 1][kol - 1] == -(ID) || boardCopy[wiersz - ID * 1][kol - 1] == -(2*ID))
+		if (boardCopy[wiersz - ID * 1][kol - 1] == -(ID))
 		{
 			if (boardCopy[wiersz - ID * 2][kol - 2] == 0)
 			{
@@ -355,9 +333,9 @@ bool Komputer::bicie(int ID, int wiersz, int kol)
 		}
 	}
 
-	if (kol+2 < SIZE && (wiersz - ID * 2) >= 0 && (wiersz - ID * 2) < 8)
+	if (kol+2 < size_ && (wiersz - ID * 2) >= 0 && (wiersz - ID * 2) < 8)
 	{
-		if (boardCopy[wiersz - ID * 1][kol + 1] == -(ID) || boardCopy[wiersz - ID * 1][kol + 1] == -(2*ID))
+		if (boardCopy[wiersz - ID * 1][kol + 1] == -(ID))
 		{
 			if (boardCopy[wiersz - ID * 2][kol + 2] == 0)
 			{
@@ -370,90 +348,11 @@ bool Komputer::bicie(int ID, int wiersz, int kol)
 }
 
 /**
-	Funkcja czy dla danej damki czy jest mozliwe bicie w dowolnym kierunku.
-
-	@param ID ID gracza wykonujacego ruch w danym posunieciu.
-	@param wiersz wiersz aktualnie rozpatrywanego pionka
-	@param kol kolumna aktualnie rozpatrywanego pionka
-	@return czy mozliwe bicie dla pionka o wsp(wiersz,kol) w aktualnym posunieciu
-*/
-bool Komputer::bicieDamka(int ID, int wiersz, int kol)
-{
-
-
-	if (kol - 2 >= 0 && (wiersz + ID * 2) >= 0 && (wiersz + ID * 2) < SIZE)
-	{
-		for (int i = 0; (kol - 2 - i >= 0) && (wiersz + ID*( 2 + i ) >=0 && (wiersz + ID * (2 + i) < SIZE)); ++i)
-		{
-			if (boardCopy[wiersz + ID * ( 1 + i)][kol - 1 - i] == -(ID) || boardCopy[wiersz + ID *(1 + i)][kol - 1 - i] == -2*(ID))
-			{
-				if (boardCopy[wiersz + ID *(2 + i)][kol - 2 - i] == 0)
-				{
-					return true;
-				}
-			}
-
-		}
-		
-	}
-
-	if (kol + 2 < SIZE && (wiersz + ID * 2) >= 0 && (wiersz + ID * 2) < SIZE)
-	{
-		for (int i = 0; (kol + 2 + i < SIZE) && (wiersz + ID * (2 + i) >= 0 && (wiersz + ID * (2 + i) < SIZE)); ++i)
-		{
-			if (boardCopy[wiersz + ID * (1 + i)][kol + 1 + i] == -(ID) || boardCopy[wiersz + ID * (1 + i)][kol + 1 + i] == -2 * (ID))
-			{
-				if (boardCopy[wiersz + ID * (2 + i)][kol + 2 + i] == 0)
-				{
-					return true;
-				}
-			}
-
-		}
-		
-	}
-
-
-	//bicia do tylu
-	if (kol - 2 >= 0 && (wiersz - ID * 2) >= 0 && (wiersz - ID * 2) < SIZE)
-	{
-		for (int i = 0; (kol - 2 - i >= 0) && (wiersz - ID * (2 + i) >= 0 && (wiersz - ID * (2 + i) < SIZE)); ++i)
-		{
-			if (boardCopy[wiersz - ID * (1 + i)][kol - 1 - i] == -(ID) || boardCopy[wiersz - ID * (1 + i)][kol - 1 - i] == -2 * (ID))
-			{
-				if (boardCopy[wiersz - ID * (2 + i)][kol - 2 - i] == 0)
-				{
-					return true;
-				}
-			}
-
-		}
-	}
-
-	if (kol + 2 < SIZE && (wiersz - ID * 2) >= 0 && (wiersz - ID * 2) < 8)
-	{
-		for (int i = 0; (kol + 2 + i < SIZE) && (wiersz - ID * (2 + i) >= 0 && (wiersz - ID * (2 + i) < SIZE)); ++i)
-		{
-			if (boardCopy[wiersz - ID * (1 + i)][kol + 1 + i] == -(ID) || boardCopy[wiersz - ID * (1 + i)][kol + 1 + i] == -2 * (ID))
-			{
-				if (boardCopy[wiersz - ID * (2 + i)][kol + 2 + i] == 0)
-				{
-					return true;
-				}
-			}
-
-		}
-	}
-
-	return false;
-}
-
-/**
 	Funkcja sprawdza przymus bicia w danym posunieciu.
 	Dla kazdego pionka gracza wykonujacego ruch sprawdza czy jest mozliwe bicie
 	jesli chociaz jeden ma mozliwe bicie to zwraca true
 
-	@param ID ID gracza wykonujacego ruch w danym posunieciu.
+	@param id ID gracza wykonujacego ruch w danym posunieciu.
 	@return czy jest przymus bicia w aktualnym posunieciu
 */
 bool Komputer::czyBicie(int ID )
@@ -463,20 +362,15 @@ bool Komputer::czyBicie(int ID )
 
 	bool pom = false;
 	//sprawdzenie czy jest przymus bicia
-	for (int i = 0; i < SIZE; ++i)
+	for (int i = 0; i < size_; ++i)
 	{
-		for (int j = 0; j < SIZE; ++j)
+		for (int j = 0; j < size_; ++j)
 		{
-			if(boardCopy[i][j] == ID)	pom = bicie(ID, i, j);  //bicie pionka
-			if (boardCopy[i][j] == 2 * ID) pom = bicieDamka(ID, i, j); //bicie damki
-			if (pom)
-			{
-				biciePossible = true;
-				break;
-			}
+			if(boardCopy[i][j] == ID)	pom = bicie(ID, i, j);
+			if (pom) biciePossible = true;
 		}
 	}
-	
+
 	return biciePossible;
 }
 
@@ -489,111 +383,51 @@ bool Komputer::czyBicie(int ID )
 
 int Komputer::markBrd()
 {
-	cout<<"plansza z oceny"<<endl;
-	drukuj(boardCopy);
-	int myCnt2 = 0;
-	int oponentCnt2 = 0;
-	
+
 	int ocena = 0;
-	for (int i = 0; i < SIZE; ++i)
+	for (int i = 0; i < size_; ++i)
 	{
-		for (int j = 0; j < SIZE; ++j)
+		for (int j = 0; j < size_; ++j)
 		{
-			if (boardCopy[i][j] == graczID)
-			{
-				ocena += WAGA_PIONKA;
-				++myCnt2;
-			}
-			if (boardCopy[i][j] == -graczID)
-			{
-				ocena += -WAGA_PIONKA;
-				++oponentCnt2;
-			}
-				
-			if (boardCopy[i][j] == 2 * graczID)
-			{
-				ocena += WAGA_DAMKI;
-				++myCnt2;
-			}
-			if (boardCopy[i][j] == -2 * graczID)
-			{
-				ocena += -WAGA_DAMKI;
-				++oponentCnt2;
-			}
-
-			if (graczID == 1)
-			{
-				if (boardCopy[i][j] == graczID || boardCopy[i][j] == 2 * graczID)
-				{
-					if (i >= 0 && i < 2) ocena += 1;	//poziom 1
-					else if (i >= 2 && i < 4) ocena += 2;	//poziom 2
-					else if (i >= 4 && i < 6) ocena += 3;	//poziom 3
-					else if (i >= 6 && i < 8) ocena += 4;	//poziom 4
-					if (i == 7) ocena += 20;
-				}
-			}
-
-			if (graczID == -1)
-			{
-				if (boardCopy[i][j] == graczID || boardCopy[i][j] == 2 * graczID)
-				{
-					if (i >= 6  && i < 8) ocena += 1;	//poziom 1
-					else if (i >= 4 && i < 6) ocena += 2;	//poziom 2
-					else if (i >= 2 && i < 4) ocena += 3;	//poziom 3
-					else if (i >= 0 && i < 2) ocena += 4;	//poziom 4
-					if (i == 0) ocena += 20;
-				}
-			}
+			if (boardCopy[i][j] == graczID) ocena += waga_pionka;
+			if (boardCopy[i][j] == -graczID) ocena += -waga_pionka;
+			if (boardCopy[i][j] == 2*graczID) ocena += waga_damki;
+			if (boardCopy[i][j] == -2*graczID) ocena += -waga_damki;
 		}
 	}
-
-	ocena += 100 * (oponentCnt - oponentCnt2); //gratyfikacja zbic
-	ocena += -100 * (myCnt - myCnt2); //unikanie tracenia pionkow
-
 
 	return ocena;
 }
 
 /**
-	Znajduje wszystkie mozliwe ruchy dla aktualnie rozpatrywanego pionka i zapisuje je do listy. 
+	Znajduje wszystkie mozliwe ruchy dla aktualnie rozpatrywanego pionka i zapisuje je do listy.
 	Wywoluje sie rekurancyjnie w celu sprawdzenia mozliwych bic wielokrotnych.
 
-	@param ID ID gracza wykonujacego ruch w danym posunieciu.
+	@param id ID gracza wykonujacego ruch w danym posunieciu.
 	@param dir okresla kierunek ruchu ;1 ruch w prawo ;-1 ruch w lewo
 	@param k kolumna aktualnie rozpatrywanego pionka
 	@param w wiersz aktualnie rozpatrywanego pionka
 	@return lista mozliwych posuniec z pionka o wspolrzednych (w,k)
 */
 
-std::list<Move> Komputer::nextPositions(int ID, int dir, int k, int w) 
+std::list<Move> Komputer::nextPositions(int ID, int dir, int k, int w)
 {
 	std::list<Move> myMoves;
 	if (!biciePossible)
 	{
-		if (czyRuchBezBicia(ID, dir, k, w))  
+		if (czyRuchBezBicia(ID, dir, k, w))  //czy nie damka
 		{
 			Move newMove(w , k, w + ID, k + dir, ID);
-			if ((ID == 1 && w+ID == SIZE - 1) || (ID == -1 && w + ID == 0))
-			{
-				newMove.kingCreate = true;
-				newMove.createKing();  //stworzenie damki
-			}
 			myMoves.push_back(newMove);
 		}
 	}
 	else {
 
-		if (boardCopy[w][k] == ID && k + dir * 2 < SIZE && k + dir * 2 >= 0 && w + ID * 2 >= 0 && w + ID * 2 < SIZE
-			&& boardCopy[w + ID * 2][k + dir * 2] == 0 && (boardCopy[w + ID * 1][k + dir * 1] == -ID || boardCopy[w + ID * 1][k + dir * 1] == -2*ID))    //bicie w przod
+		if (boardCopy[w][k] == ID && k + dir * 2 < size_ && k + dir * 2 >= 0 && w + ID * 2 >= 0 && w + ID * 2 < size_
+			&& boardCopy[w + ID * 2][k + dir * 2] == 0 && boardCopy[w + ID * 1][k + dir * 1] == -ID)    //bicie w przod
 		{
-			
-			Move newMove(w, k, w + 2 * ID, k + 2 * dir, ID, w + ID * 1, k + dir * 1);
 
-			if ((ID == 1 && w == SIZE - 1) || (ID == -1 && w == 0))
-			{
-				newMove.createKing();  //stworzenie damki
-				newMove.kingCreate = true;
-			}
+			Move newMove(w, k, w + 2 * ID, k + 2 * dir, ID, w + ID * 1, k + dir * 1);
 			myMoves.push_back(newMove);
 			makeMove(newMove);
 
@@ -606,8 +440,8 @@ std::list<Move> Komputer::nextPositions(int ID, int dir, int k, int w)
 			if (!(nextList = nextPositions(ID, -1, k + dir * 2, w + ID * 2)).empty())
 				myMoves.splice(myMoves.end(), nextList);
 
-			
-			
+
+
 			rollBackMove(newMove);
 			if (lastsize == myMoves.size())
 			{
@@ -615,34 +449,19 @@ std::list<Move> Komputer::nextPositions(int ID, int dir, int k, int w)
 			}
 			else
 			{
-				bool king = false;
 				for (list<Move>::iterator it = myMoves.begin(); it != myMoves.end(); it++)
 				{
-					
-					if ((*it).kingCreate) king = true;
-					if (king)
-					{
-						(*it).kingCreate = true;
-						(*it).createKing();
-					}
-					(*it).from[0] = w;
-					(*it).from[1] = k;
 					(*it).addCaptured(w + ID * 1, k + dir * 1);
 				}
 				for (int i = 0; i < lastsize; ++i) myMoves.pop_front();
 			}
 		}
 
-		if (boardCopy[w][k] == ID && k + dir * 2 < SIZE && k + dir * 2 >= 0 && w - ID * 2 >= 0 && w - ID * 2 < SIZE
-			&& boardCopy[w - ID * 2][k + dir * 2] == 0 && (boardCopy[w - ID * 1][k + dir * 1] == -ID || boardCopy[w - ID * 1][k + dir * 1] == -2*ID))    //bicie w tyl
+		if (boardCopy[w][k] == ID && k + dir * 2 < size_ && k + dir * 2 >= 0 && w - ID * 2 >= 0 && w - ID * 2 < size_
+			&& boardCopy[w - ID * 2][k + dir * 2] == 0 && boardCopy[w - ID * 1][k + dir * 1] == -ID)    //bicie w tyl
 		{
-			
+
 			Move newMove(w, k, w - 2 * ID, k + 2 * dir, ID, w - ID * 1, k + dir * 1);
-			if ((ID == 1 && w == SIZE - 1) || (ID == -1 && w == 0))
-			{
-				newMove.createKing();  //stworzenie damki
-				newMove.kingCreate = true;
-			}
 			myMoves.push_back(newMove);
 			makeMove(newMove);
 
@@ -664,18 +483,8 @@ std::list<Move> Komputer::nextPositions(int ID, int dir, int k, int w)
 			}
 			else
 			{
-				bool king = false;
 				for (list<Move>::iterator it = myMoves.begin(); it != myMoves.end(); it++)
 				{
-
-					if ((*it).kingCreate) king = true;
-					if (king)
-					{
-						(*it).kingCreate = true;
-						(*it).createKing();
-					}
-					(*it).from[0] = w;
-					(*it).from[1] = k;
 					(*it).addCaptured(w - ID * 1, k + dir * 1);
 				}
 				for (int i = 0; i < lastsize; ++i) myMoves.pop_front();
@@ -687,150 +496,10 @@ std::list<Move> Komputer::nextPositions(int ID, int dir, int k, int w)
 	return myMoves;
 }
 
-
-/**
-	Znajduje wszystkie mozliwe ruchy dla aktualnie rozpatrywanej damki i zapisuje je do listy.
-	Wywoluje sie rekurancyjnie w celu sprawdzenia mozliwych bic wielokrotnych.
-
-	@param ID ID gracza wykonujacego ruch w danym posunieciu.
-	@param dir okresla kierunek ruchu ;1 ruch w prawo ;-1 ruch w lewo
-	@param k kolumna aktualnie rozpatrywanego pionka
-	@param w wiersz aktualnie rozpatrywanego pionka
-	@return lista mozliwych posuniec damki o wspolrzednych (w,k)
-*/
-std::list<Move> Komputer::nextKingPositions(int ID, int dir, int k, int w)
-{
-	std::list<Move> myMoves;
-	if (!biciePossible)
-	{
-		if (czyRuchBezBicia(ID, dir, k, w))
-		{
-			for (int i = 0; w + ID * (1 + i) >= 0 && w + ID * (1 + i) < SIZE && k + dir * (1 + i) >= 0 && k + dir * (1 + i) < SIZE && boardCopy[w + ID * (1 + i)][k + dir * (1 + i)] == 0; ++i)
-			{
-				Move newMove(w, k, w + ID * (1 + i), k + dir * (1 + i), 2 * ID);
-				myMoves.push_back(newMove);
-			}
-		}
-
-		if (isKingMoveBack(ID, dir, k, w))
-		{
-			for (int i = 0; w - ID * (1 + i) >= 0 && w - ID * (1 + i) < SIZE && k + dir * (1 + i) >= 0 && k + dir * (1 + i) < SIZE && boardCopy[w - ID * (1 + i)][k + dir * (1 + i)] == 0; ++i)
-			{
-				Move newMove(w, k, w - ID * (1 + i), k + dir * (1 + i), 2 * ID);
-				myMoves.push_back(newMove);
-			}
-
-		}
-
-	}
-	else {
-
-		if (boardCopy[w][k] == 2 * ID && k + dir * 2 < SIZE && k + dir * 2 >= 0 && w + ID * 2 >= 0 && w + ID * 2 < SIZE)    //bicie w przod
-		{
-			//opis warunkow po kolei: kolumna po biciu wieksza rowna 0; kolumna po biciu mniejsza od 8;  wiersz bo biciu wiekszy rowny 0; wiersz po biciu mniejszy od 8
-			//pole puste az do znalezienia bicia chyba ze i == 0
-			for (int i = 0; (k + dir * (2 + i) >= 0) && (k + dir * (2 + i) < SIZE) && (w + ID * (2 + i) >= 0 && (w + ID * (2 + i) < SIZE))
-				&& (boardCopy[w + ID * i][k + dir * i] == 0 || i == 0); ++i)
-			{
-				//znalezienie pionka do bicia na nastepnym polu
-				if (boardCopy[w + ID * (1 + i)][k + dir*(1 + i)] == -(ID) || boardCopy[w + ID * (1 + i)][k + dir*(1 + i)] == -2 * (ID))
-				{
-					//opis warunkow po kolei: j-ty wiersz za pionkiem >= 0 oraz <8; j-ta kolumna za pionkiem >=0 oraz <8; j-te miejsce za pionkiem puste 
-					for (int j = 0; w + ID * (2 + i + j) >= 0 && w + ID * (2 + i + j) < SIZE && k + dir * (2 + i + j) >= 0
-						&& k + dir * (2 + i + j) < SIZE && boardCopy[w + ID * (2 + i + j)][k + dir * (2 + i + j)] == 0; ++j)
-					{
-						Move newMove(w, k, w + ID * (2 + i + j), k + dir * (2 + i + j), 2 * ID, w + ID * (1 + i), k + dir * (1 + i));
-						myMoves.push_back(newMove);
-						makeMove(newMove);
-
-						int lastsize = myMoves.size();
-
-						std::list<Move> nextList;
-
-						if (!(nextList = nextKingPositions(ID, 1, k + dir * (2 + i + j), w + ID * (2 + i + j))).empty())
-							myMoves.splice(myMoves.end(), nextList);
-						if (!(nextList = nextKingPositions(ID, -1, k + dir * (2 + i + j), w + ID * (2 + i + j))).empty())
-							myMoves.splice(myMoves.end(), nextList);
-
-
-						rollBackMove(newMove);
-						if (lastsize == myMoves.size())
-						{
-							return myMoves;
-						}
-						else
-						{
-							for (list<Move>::iterator it = myMoves.begin(); it != myMoves.end(); it++)
-							{
-								(*it).from[0] = w;
-								(*it).from[1] = k;
-								(*it).addCaptured(w + ID * (1 + i), k + dir * (1 + i));
-							}
-							for (int i = 0; i < lastsize; ++i) myMoves.pop_front();
-						}
-
-					}
-				}
-			}
-
-			if (boardCopy[w][k] == 2 * ID && k + dir * 2 < SIZE && k + dir * 2 >= 0 && w - ID * 2 >= 0 && w - ID * 2 < SIZE)    //bicie w tyl
-			{
-				//opis warunkow po kolei: kolumna po biciu wieksza rowna 0; kolumna po biciu mniejsza od 8;  wiersz bo biciu wiekszy rowny 0; wiersz po biciu mniejszy od 8
-				//pole puste az do znalezienia bicia chyba ze i == 0
-				for (int i = 0; (k + dir * (2 + i) >= 0) && (k + dir * (2 + i) < SIZE) && (w - ID * (2 + i) >= 0 && (w - ID * (2 + i) < SIZE))
-					&& (boardCopy[w - ID * i][k + dir * i] == 0 || i == 0); ++i)
-				{
-					//znalezienie pionka do bicia na nastepnym polu
-					if (boardCopy[w - ID * (1 + i)][k + dir*(1 + i)] == -(ID) || boardCopy[w - ID * (1 + i)][k + dir*(1 + i)] == -2 * (ID))
-					{
-						//opis warunkow po kolei: j-ty wiersz za pionkiem >= 0 oraz <8; j-ta kolumna za pionkiem >=0 oraz <8; j-te miejsce za pionkiem puste 
-						for (int j = 0; w - ID * (2 + i + j) >= 0 && w - ID * (2 + i + j) < SIZE && k + dir * (2 + i + j) >= 0
-							&& k + dir * (2 + i + j) < SIZE && boardCopy[w - ID * (2 + i + j)][k + dir * (2 + i + j)] == 0; ++j)
-						{
-							Move newMove(w, k, w - ID * (2 + i + j), k + dir * (2 + i + j), 2 * ID, w - ID * (1 + i), k + dir * (1 + i));
-							myMoves.push_back(newMove);
-							makeMove(newMove);
-
-							int lastsize = myMoves.size();
-
-							std::list<Move> nextList;
-
-							if (!(nextList = nextKingPositions(ID, 1, k + dir * (2 + i + j), w - ID * (2 + i + j))).empty())
-								myMoves.splice(myMoves.end(), nextList);
-							if (!(nextList = nextKingPositions(ID, -1, k + dir * (2 + i + j), w - ID * (2 + i + j))).empty())
-								myMoves.splice(myMoves.end(), nextList);
-
-
-							rollBackMove(newMove);
-							if (lastsize == myMoves.size())
-							{
-								return myMoves;
-							}
-							else
-							{
-								for (list<Move>::iterator it = myMoves.begin(); it != myMoves.end(); it++)
-								{
-									(*it).from[0] = w;
-									(*it).from[1] = k;
-									(*it).addCaptured(w - ID * (1 + i), k + dir * (1 + i));
-								}
-								for (int i = 0; i < lastsize; ++i) myMoves.pop_front();
-							}
-
-						}
-					}
-				}
-			}
-		}
-	}
-
-	return myMoves;
-}
-
 /**
 	Sprawdza mozliwosc najprostszego ruchu bez bicia w kierunku okreslonym przez dir.
 
-	@param ID ID gracza wykonujacego ruch w danym posunieciu.
+	@param id ID gracza wykonujacego ruch w danym posunieciu.
 	@param dir okresla kierunek ruchu ;1 ruch w prawo ;-1 ruch w lewo
 	@param k kolumna aktualnie rozpatrywanego pionka
 	@param w wiersz aktualnie rozpatrywanego pionka
@@ -838,32 +507,18 @@ std::list<Move> Komputer::nextKingPositions(int ID, int dir, int k, int w)
 */
 bool Komputer::czyRuchBezBicia( int ID, int dir, int k, int w)
 {
-	return ((boardCopy[w][k] == ID || boardCopy[w][k] == 2*ID) && k + dir * 1 < SIZE && k + dir * 1 >= 0 && boardCopy[w + ID * 1][k + dir * 1] == 0 
-		&& w + ID >= 0 && w + ID < SIZE);
+
+	return (boardCopy[w][k] == ID && k + dir * 1 < size_ && k + dir * 1 >= 0 && boardCopy[w + ID * 1][k + dir * 1] == 0 && w + ID >= 0 && w + ID < size_);
 }
 
 /**
-	Sprawdza mozliwosc ruchu bez bicia do tylu dla damki
-
-	@param ID ID gracza wykonujacego ruch w danym posunieciu.
-	@param dir okresla kierunek ruchu ;1 ruch w prawo ;-1 ruch w lewo
-	@param k kolumna aktualnie rozpatrywanego pionka
-	@param w wiersz aktualnie rozpatrywanego pionka
-	@return true jesli jest mozliwy ruch
-*/
-bool Komputer::isKingMoveBack(int ID, int dir, int k, int w)
-{
-	return ((boardCopy[w][k] == 2*ID ) && k + dir * 1 < SIZE && k + dir * 1 >= 0 && boardCopy[w - ID * 1][k + dir * 1] == 0 && (w - ID*1) >= 0 && (w - ID) < SIZE);
-}
-
-/**
-	Wykonuje ruch na skladowej boardCopy okreslony przez move 
+	Wykonuje ruch na skladowej boardCopy okreslony przez move
 
 	@param move ruch do wykonania
 */
 void Komputer::makeMove(Move move)
 {
-	
+
 	boardCopy[move.from[0]][move.from[1]] = 0;
 	boardCopy[move.to[0]][move.to[1]] = move.ID;
 
@@ -871,9 +526,9 @@ void Komputer::makeMove(Move move)
 	vector<int>::iterator it2;
 	for (it = move.capturedRow.begin(), it2 = move.capturedCol.begin(); it != move.capturedRow.end(); it++, it2++)
 	{
-		boardCopy[*it][*it2] = 0;  
+		boardCopy[*it][*it2] = 0;
 	}
-	
+
 }
 
 /**
@@ -883,16 +538,14 @@ void Komputer::makeMove(Move move)
 */
 void Komputer::rollBackMove(Move move)
 {
-	if(move.kingCreate) 
-		boardCopy[move.from[0]][move.from[1]] = move.ID / 2;
-	else boardCopy[move.from[0]][move.from[1]] = move.ID;
+	boardCopy[move.from[0]][move.from[1]] = move.ID;
 	boardCopy[move.to[0]][move.to[1]] = 0;
 
 	vector<int>::iterator it;
 	vector<int>::iterator it2;
 	for (it = move.capturedRow.begin() , it2 = move.capturedCol.begin(); it != move.capturedRow.end(); it++ , it2++)
 	{
-		boardCopy[*it][*it2] = -(move.ID);  
+		boardCopy[*it][*it2] = -(move.ID);
 	}
 }
 
@@ -904,5 +557,9 @@ void Komputer::rollBackMove(Move move)
 */
 Move Komputer::getBestMove()
 {
+	if (bestMove.ID != 0)
+	{
+		return bestMove;
+	}
 	return bestMove;
 }

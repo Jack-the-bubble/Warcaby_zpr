@@ -34,7 +34,7 @@ BOOST_PYTHON_MODULE(engine){
 		.def("getPlansza", &Plansza::getPlansza)
 		;
 
-	class_<Komputer, bases<Gracz> >("Komputer", init<int>());
+	class_<Komputer, bases<Gracz> >("Komputer", init</*int*/>());
 
 	class_<Gra>("Gra", init</*int*/>())
 	        .def("drukuj", &Gra::drukuj)

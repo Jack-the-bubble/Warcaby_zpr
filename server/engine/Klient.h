@@ -10,9 +10,6 @@
 #include <boost/python.hpp>
 using namespace boost::python;
 typedef boost::python::list pyList;
-//class Move{};
-
-
 
 class GraczWrap : public Gracz, public wrapper<Gracz>
 {
@@ -28,10 +25,6 @@ public:
 	virtual Move getBestMove(){
 		return this->get_override("getBestMove")();
 	}
-
-//	virtual Move getOponentMove(Move oponentMove){
-//		return this->get_override("getOponentMove")();
-//	}
 };
 
 /**
@@ -53,16 +46,13 @@ public:
 	void set(int i);
 	int get();
 	void convert_and_update(boost::python::list board);
-//<<<<<<< HEAD
 	void moveUpdate(int begMov_x,int  begMov_y,int destMov_x, int destMov_y, pyList cap);
 	int planszaCopy[8][8];
 	bool ready = false;
 	Move putLatestMove(boost::python::list move);
 	Move latestMove;
-//=======
 	int test;
 	int graczID; /**< identyfikator gracza */
-//>>>>>>> fc4467e51dbd79f216efd7794bb93c5f319c6835
 };
 
 

@@ -10,35 +10,14 @@ using namespace std;
 
 Gra::Gra()
 {
-//<<<<<<< HEAD
-//=======
-//	Komputer pl1(1);
-//	player1 = &pl1;
-//>>>>>>> fc4467e51dbd79f216efd7794bb93c5f319c6835
-
-
-//Klient* pla = new Klient();
-
-	//Uzytkownik pl1(1);
-//	Klient pl1();
-//	player1 = pla;
-
 	player1 = Kl(new Klient);
-
-//    Komputer* pl2 = new Komputer(-1);
-//	Komputer pl2(-1);
-//	player2 = &pl2;
-//    player2 = pl2;
-
-    player2 = Kom(new Komputer);
-//    plansza = P(new Plansza);
-
+	player2 = Kom(new Komputer);
 }
 
 
 Gra::~Gra()
 {
-
+//	delete player1, player2;
 }
 
 /**
@@ -52,7 +31,7 @@ void Gra::drukuj()
 	std::cout << std::endl;
 	for (int i = KOLUMNY - 1; i >= 0; --i)
 	{
-	
+
 		std::cout <<i<< "|";
 		for (int j = 0; j < KOLUMNY; ++j)
 		{
@@ -70,45 +49,45 @@ void Gra::drukuj()
 	}
 }
 
-//<<<<<<< HEAD
-
-
-//=======
 /**
 	Glowna petla gry. Kontroluje przeplyw ruchow miedzy graczami, stan planszy i decyduje o koncu gry.
 */
-//>>>>>>> fc4467e51dbd79f216efd7794bb93c5f319c6835
 void Gra::play()
 {
 	this->drukuj();
 
-//<<<<<<< HEAD
-//
-//	Klient* pla = new Klient();
-//	//Uzytkownik pl1(1);
-////	Klient pl1();
-//	player1 = pla;
+	//Uzytkownik pl1(1);
+//	Komputer pl1(1);
+//	player1 = &pl1;
 //
 //	Komputer pl2(-1);
 //	player2 = &pl2;
+	Move moveToDo;
 
+//	player1 = Kl(new Klient);
+//	player2 = Kom(new Komputer);
 
-//	cout<<pla->getID()<<endl;
-
-//=======
-//>>>>>>> fc4467e51dbd79f216efd7794bb93c5f319c6835
-	while (!(plansza.isWin())) 
-	{
- 		this->player1notify();
-		plansza.makeMove(player1->getBestMove());
-		this->drukuj();
-		int i;
-		scanf("jo: %d", &i);
-		this->player2notify();
-		//player1->oponentMove(player2->getBestMove()); 
-		plansza.makeMove(player2->getBestMove());
-		this->drukuj();
-	}
+//	while (plansza.getPionkiBiale() != 0 || plansza.getPionkiCzarne() != 0)
+//	{
+//		this->player1notify();
+//		moveToDo = player1->getBestMove();
+//		if (moveToDo.ID == 0)
+//		{
+//			return;
+//		}
+//		plansza.makeMove(moveToDo);
+//
+//		this->drukuj();
+//		this->player2notify();
+//		//player1->oponentMove(player2->getBestMove());
+//		moveToDo = player2->getBestMove();
+//		if (moveToDo.ID == 0)
+//		{
+//			return;
+//		}
+//		plansza.makeMove(moveToDo);
+//		this->drukuj();
+//	}
 
 	return;
 }
@@ -120,10 +99,8 @@ void Gra::player1notify()
 {
 
 	this->drukuj();
-//	cout<<player3->getID()<<endl;
-//	cout<<player1->ready<<endl;
+
 //	cout<<player1->getID()<<endl;
-	cout<<player1->getID()<<endl;
 	player1->update(plansza.plansza);
 
 
@@ -137,7 +114,6 @@ void Gra::player2notify()
 	player2->update(plansza.plansza);
 
 }
-//<<<<<<< HEAD
 
 void Gra::klientMoveUpdate(int begMov_x,int  begMov_y,int destMov_x, int destMov_y, pyList cap){//(int begMov_x,int  begMov_y,int destMov_x, int destMov_y, int rowC, int colC) {
 	cout<<"calling client to create move"<<endl;
@@ -151,7 +127,7 @@ void Gra::computerUpdate() {
 }
 
 void Gra::changePlansza() {
-	cout<<"changing plansza"<<endl;
+	cout<<"changing plansza after client move"<<endl;
 	Move pom = player1->getBestMove();
 	cout<<"moving from "<<pom.from[0] <<" "<<pom.from[1]<< " point to "<<pom.to[0] <<" "<<pom.to[1]<<endl;
 	plansza.makeMove(pom);
@@ -159,27 +135,24 @@ void Gra::changePlansza() {
 
 pyList Gra::convertAndSend(){
     Move move = player2->getBestMove();
-    cout<<"move to make from cpp: "<<move.from[0]<<endl;
+    cout<<"move to make from cpp: "<<move.from[0]<<" "<<move.from[1]<< " point to "<<move.to[0] <<" "<<move.to[1]<<endl;
     plansza.makeMove(player2->getBestMove());
     pyList list;
     list.append(move.from[0]);
 	list.append(move.from[1]);
 	list.append(move.to[0]);
 	list.append(move.to[1]);
-	int i = 0;
-	while (i != move.capturedRow.size()){
+	int i = move.capturedRow.size()-1;
+	while (i >= 0){
 		list.append(move.capturedRow[i]);
 		list.append(move.capturedCol[i]);
-		i++;
+		i--;
 	}
+
     return list;
 }
 
-//int main(){
-//	return 0;
-//}
-//=======
-//>>>>>>> fc4467e51dbd79f216efd7794bb93c5f319c6835
+
 void Gra::assignID(int i){
 	ID_ = i;
 }
