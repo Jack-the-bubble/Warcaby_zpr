@@ -3,8 +3,8 @@
 ## Technologie
 Technologie wykorzystywane w projekcie:
 - Python -> Flask, Flask-SocketIO, eventlet, PyTest
-- C++ -> boost_unit_test_framework, Boost.Python
-- JavaScript
+- C++ -> Boost::Python
+- JavaScript, HTML, CSS
 
 ## Budowanie i uruchamianie aplikacji
 W celu uruchomienia aplikacji należy:
@@ -28,8 +28,7 @@ W celu uruchomienia aplikacji należy:
   3. libboost-all-dev (boost), scons, python3-pip, Flask, flask-socketio, eventlet, pytest 
 
 ### Kompilacja
-	W celu kompilacji dla linuxa należy wejść do folderu server/engine/ i w konsoli uruchomić komendę makefile. Niemniej w projekcie znajduje się już skompilowana wersja potrzebnych bibliotek.
+	W celu kompilacji dla linuxa należy wejść do folderu server/engine/ i w konsoli uruchomić komendę makefile. 
 ### Czyszczenie plików utworzonych przez SConst
 Należy wywołać z poziomu katalogu server/engine/:
 **make clean**
-
