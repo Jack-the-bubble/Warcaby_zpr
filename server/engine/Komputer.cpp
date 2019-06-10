@@ -452,6 +452,8 @@ std::list<Move> Komputer::nextPositions(int ID, int dir, int k, int w)
 				for (list<Move>::iterator it = myMoves.begin(); it != myMoves.end(); it++)
 				{
 					(*it).addCaptured(w + ID * 1, k + dir * 1);
+					(*it).from[0] = w;
+					(*it).from[1] = k;
 				}
 				for (int i = 0; i < lastsize; ++i) myMoves.pop_front();
 			}
