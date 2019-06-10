@@ -4,8 +4,6 @@ using namespace std;
 
 /**
 	Konstruktor klasy Gra. Tworzy graczy z odpowiednimi identyfikatorami
-
-	@param i identyfikator klienta aplikacji frontendowej
 */
 
 Gra::Gra()
@@ -17,7 +15,6 @@ Gra::Gra()
 
 Gra::~Gra()
 {
-//	delete player1, player2;
 }
 
 /**
@@ -51,43 +48,34 @@ void Gra::drukuj()
 
 /**
 	Glowna petla gry. Kontroluje przeplyw ruchow miedzy graczami, stan planszy i decyduje o koncu gry.
+ 	sluzy do testowania rozgrywki bez polaczenia z serwerem
 */
 void Gra::play()
 {
 	this->drukuj();
-
-	//Uzytkownik pl1(1);
-//	Komputer pl1(1);
-//	player1 = &pl1;
-//
-//	Komputer pl2(-1);
-//	player2 = &pl2;
 	Move moveToDo;
 
-//	player1 = Kl(new Klient);
-//	player2 = Kom(new Komputer);
+	while (plansza.getPionkiBiale() != 0 || plansza.getPionkiCzarne() != 0)
+	{
+		this->player1notify();
+		moveToDo = player1->getBestMove();
+		if (moveToDo.ID == 0)
+		{
+			return;
+		}
+		plansza.makeMove(moveToDo);
 
-//	while (plansza.getPionkiBiale() != 0 || plansza.getPionkiCzarne() != 0)
-//	{
-//		this->player1notify();
-//		moveToDo = player1->getBestMove();
-//		if (moveToDo.ID == 0)
-//		{
-//			return;
-//		}
-//		plansza.makeMove(moveToDo);
-//
-//		this->drukuj();
-//		this->player2notify();
-//		//player1->oponentMove(player2->getBestMove());
-//		moveToDo = player2->getBestMove();
-//		if (moveToDo.ID == 0)
-//		{
-//			return;
-//		}
-//		plansza.makeMove(moveToDo);
-//		this->drukuj();
-//	}
+		this->drukuj();
+		this->player2notify();
+		//player1->oponentMove(player2->getBestMove());
+		moveToDo = player2->getBestMove();
+		if (moveToDo.ID == 0)
+		{
+			return;
+		}
+		plansza.makeMove(moveToDo);
+		this->drukuj();
+	}
 
 	return;
 }
@@ -97,17 +85,12 @@ void Gra::play()
 */
 void Gra::player1notify()
 {
-
 	this->drukuj();
-
-//	cout<<player1->getID()<<endl;
 	player1->update(plansza.plansza);
-
-
 }
 
 /**
-	Funkcja wywolywana gdy gracz 1 ma wykonac ruch
+	Funkcja wywolywana gdy komputer ma wykonac ruch
 */
 void Gra::player2notify()
 {
@@ -115,28 +98,44 @@ void Gra::player2notify()
 
 }
 
+/**
+ * Funkcja uaktualniajaca pole bestMove po ruchu klienta
+ * - wspolrzedne podane sa w notacji, ktorej uzywa logika komputera
+ * @param begMov_x - wspolrzedna x poczatkowej pozycji pionka ktory nalezy ruszyc
+ * @param begMov_y - wspolrzedna y poczatkowej pozycji pionka ktory nalezy ruszyc
+ * @param destMov_x - wspolrzedna x koncowej pozycji pionka ktory nalezy ruszyc
+ * @param destMov_y - wspolrzedne y koncowej pozycji pionka ktory nalezy ruszyc
+ * @param cap - lista pionkow przeciwnika do usuniecia
+ * */
 void Gra::klientMoveUpdate(int begMov_x,int  begMov_y,int destMov_x, int destMov_y, pyList cap){//(int begMov_x,int  begMov_y,int destMov_x, int destMov_y, int rowC, int colC) {
-	cout<<"calling client to create move"<<endl;
-	int roC = boost::python::extract<int>(cap[0]);
-	int coC = boost::python::extract<int>(cap[1]);
+//	cout<<"calling client to create move"<<endl;
 	player1->moveUpdate(begMov_x, begMov_y, destMov_x, destMov_y,cap);
 }
 
+/**
+ * funkcja uaktualniajaca plansze gry po ruchu komputera korzystajac ruchu
+ * zapisanego w bestMove
+ * */
 void Gra::computerUpdate() {
 	plansza.makeMove(player2->getBestMove());
 }
 
+/**
+ * funkcja uaktualniajaca plansze gry po ruchu klienta korzystajac z ruchu
+ * zapisanego w latestMove
+ * */
 void Gra::changePlansza() {
-	cout<<"changing plansza after client move"<<endl;
-	Move pom = player1->getBestMove();
-	cout<<"moving from "<<pom.from[0] <<" "<<pom.from[1]<< " point to "<<pom.to[0] <<" "<<pom.to[1]<<endl;
-	plansza.makeMove(pom);
+	plansza.makeMove(player1->getBestMove());
 }
 
+/**
+ * funkcja tlumaczy na notacje klienta i wysyla ruch komputera do serwera
+ * w pytohnie
+ * */
 pyList Gra::convertAndSend(){
     Move move = player2->getBestMove();
-    cout<<"move to make from cpp: "<<move.from[0]<<" "<<move.from[1]<< " point to "<<move.to[0] <<" "<<move.to[1]<<endl;
-    plansza.makeMove(player2->getBestMove());
+//    cout<<"move to make from cpp: "<<move.from[0]<<" "<<move.from[1]<< " point to "<<move.to[0] <<" "<<move.to[1]<<endl;
+    plansza.makeMove(move);
     pyList list;
     list.append(move.from[0]);
 	list.append(move.from[1]);
@@ -152,19 +151,34 @@ pyList Gra::convertAndSend(){
     return list;
 }
 
-
+/**
+ * funkcja testuje komunikacje z serwerem
+ * @param i - nowe ID gry
+ * */
 void Gra::assignID(int i){
 	ID_ = i;
 }
 
+
+/**
+ * funkcja zwraca zapisane ID gry
+ * */
 int Gra::getID(){
 	return ID_;
 }
 
+
+/**
+ * funkcja zwraca zapisane ID klienta
+ * */
 int Gra::klientGet(){
 	player1->get();
 }
 
+/**
+ * funkcja ustawia pole test klienta
+ * @param i - ustawia wartosc
+ * */
 void Gra::klientSet(int i){
 	player1->set(i);
 }

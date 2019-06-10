@@ -6,7 +6,8 @@
 Klient::Klient()
 {
 	graczID = 1;
-	latestMove = Move();
+	bestMove = Move();
+//	latestMove = Move();
 }
 
 
@@ -21,12 +22,6 @@ Klient::~Klient()
 */
 void Klient::update(const int plansza[8][8])
 {
-	//TODO
-	std::cout<<"hey"<<std::endl;
-	//Przeslanie aktualnej planszy do klienta
-	//przeslanie gotowej planszy przez klienta
-	
-
 
 }
 
@@ -36,48 +31,44 @@ int Klient::getID()
 
 }
 
-void Klient::convert_and_update(boost::python::list board){
-	int C_board[8][8];
-	for (int i = 0; i < 8; i++){
-		for (int j = 0; j < 8; j++){
-			C_board[i][j]=extract<int>(board[i*8+j]);
-		}
+/**
+ * funkcja uaktualnia pole bestMove po ruchu klienta
+ * - wspolrzedne podane sa w notacji, ktorej uzywa logika komputera
+ * @param begMov_x - wspolrzedna x poczatkowej pozycji pionka ktory nalezy ruszyc
+ * @param begMov_y - wspolrzedna y poczatkowej pozycji pionka ktory nalezy ruszyc
+ * @param destMov_x - wspolrzedna x koncowej pozycji pionka ktory nalezy ruszyc
+ * @param destMov_y - wspolrzedne y koncowej pozycji pionka ktory nalezy ruszyc
+ * @param cap - lista pionkow przeciwnika do usuniecia
+ * */
+void Klient::moveUpdate(int begMov_x,int  begMov_y,int destMov_x, int destMov_y, pyList cap) {
+//	std::cout<<"creating move, captured: "<<boost::python::extract<int>(cap[0])<<" "<< boost::python::extract<int>(cap[1])<<std::endl;
+	Move move= Move(begMov_y, begMov_x, destMov_y, destMov_x, 1, boost::python::extract<int>(cap[0]), boost::python::extract<int>(cap[1]));
+//	std::cout<<"translated move from client: "<<std::endl;
+//	move.printMove();
+	for (int i = 0; i < boost::python::len(cap)-2; i+=2) {
+		move.addCaptured(boost::python::extract<int>(cap[i+2]), boost::python::extract<int>(cap[i+3]));
 	}
-	Klient::update(C_board);
+	bestMove = move;
 }
 
 /**
-	Funkcja uzyskujaca ostatni ruch oponenta
-
-	@param oponentMove poprzedni ruch przeciwnika
-*/
-void Klient::oponentMove(Move oponentMove)
-{
-	//co chcesz
-}
-
-void Klient::moveUpdate(int begMov_x,int  begMov_y,int destMov_x, int destMov_y, pyList cap) {
-	std::cout<<"creating move, captured: "<<boost::python::extract<int>(cap[0])<<" "<< boost::python::extract<int>(cap[1])<<std::endl;
-	Move move= Move(begMov_y, begMov_x, destMov_y, destMov_x, 1, boost::python::extract<int>(cap[0]), boost::python::extract<int>(cap[1]));
-	std::cout<<"translated move from client: "<<std::endl;
-	move.printMove();
-	for (int i = 0; i < boost::python::len(cap)-2; i+=2) {
-		move.addCaptured(boost::python::extract<int>(cap[i+2]), boost::python::extract<int>(cap[i+3]));
-		std::cout<<"removing piece "<<boost::python::extract<int>(cap[i+2])<<" "<< boost::python::extract<int>(cap[i+3])<<std::endl;
-	}
-	latestMove.printMove();
-	Klient::latestMove = move;//Move(begMov[0], begMov[1], destMov[0], destMov[1], 1, rowC, colC);
-}
-
+ * @return ruch zapisany w bestMove
+ * */
 Move Klient::getBestMove()
 {
-	return latestMove;
+	return bestMove;
 }
 
+/**
+ * funkcja ustawia wartosc test
+ * */
 void Klient::set(int i){
 	test = i;
 }
 
+/**
+ * funkcja wypisuje  w konsoli wartosc test
+ * */
 int Klient::get(){
 	std::cout<<"oto test from klient "<<test<<std::endl;
 }

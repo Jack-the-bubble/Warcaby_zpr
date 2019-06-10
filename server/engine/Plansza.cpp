@@ -58,6 +58,12 @@ bool Plansza::isWin()
 	return ((cnt1 == 0) || (cnt2 == 0));
 }
 
+/**
+ * funkcja sprawdza czy dany pion jest damka
+ * @param graczID - identyfikator gracza, ktorego pion chcemy zidentyfikowac
+ * @param w - wiersz piona
+ * @param k - kolumna piona
+ * */
 bool Plansza::damka(int graczID, int w, int k)
 {
 	if ((graczID == 1 && w == KOLUMNY-1) || (graczID == -1 && w == 0))

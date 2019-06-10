@@ -9,6 +9,16 @@ Move::Move()
 	ID = 0;
 }
 
+/**
+ * konstruktor obiektu ruchu pionkiem z parametrami
+ * @param from_r - wiersz poczatkowej pozycji pionka
+ * @param from_c - kolumna poczatkowej pozycji pionka
+ * @param to_r - wiersz koncowej pozycji pionka
+ * @param to_r - kolumna koncowej pozycji pionka
+ * @param ID_ - identyfikator ruchu
+ * @param rowC - rzad pionka do usuniecia - jesli brak bicia, ma wartosc -1
+ * @param colC - kolumna pionka do usuniecia - jesli brak bicia, ma wartosc -1
+ * */
 Move::Move(int from_r, int from_c, int to_r, int to_c, int ID_, int rowC, int colC)
 {
 	from[0] = from_r;

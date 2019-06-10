@@ -1,5 +1,3 @@
-//#pragma once
-
 #ifndef __KLIENT_H__
 #define __KLIENT_H__
 
@@ -11,6 +9,9 @@
 using namespace boost::python;
 typedef boost::python::list pyList;
 
+/**
+ * wrapper z biblioteki boost::python do eksponowania metod z klasy Gracz
+ * */
 class GraczWrap : public Gracz, public wrapper<Gracz>
 {
 public:
@@ -39,20 +40,14 @@ class Klient :
 public:
 	Klient();
 	~Klient();
-	virtual void update(const int plansza[8][8]);
-	virtual int getID();
-	virtual void oponentMove(Move oponentMove);
-	virtual Move getBestMove();
-	void set(int i);
-	int get();
-	void convert_and_update(boost::python::list board);
-	void moveUpdate(int begMov_x,int  begMov_y,int destMov_x, int destMov_y, pyList cap);
-	int planszaCopy[8][8];
-	bool ready = false;
-	Move putLatestMove(boost::python::list move);
-	Move latestMove;
+	virtual void update(const int plansza[8][8]); /**pusta*/
+	virtual int getID();				/**zwraca graczID*/
+	virtual Move getBestMove();			/**zwraca bestMove*/
+	void set(int i);					/**ustawia test*/
+	int get();							/**zwraca test*/
+	void moveUpdate(int begMov_x,int  begMov_y,int destMov_x, int destMov_y, pyList cap); /**zapisuje ruch klienta*/
 	int test;
-	int graczID; /**< identyfikator gracza */
+	int graczID; 									/**< identyfikator gracza */
 };
 
 

@@ -513,7 +513,6 @@ bool Komputer::czyRuchBezBicia( int ID, int dir, int k, int w)
 
 /**
 	Wykonuje ruch na skladowej boardCopy okreslony przez move
-
 	@param move ruch do wykonania
 */
 void Komputer::makeMove(Move move)
@@ -533,7 +532,6 @@ void Komputer::makeMove(Move move)
 
 /**
 	Cofa ruch na skladowej boardCopy okreslony przez move
-
 	@param move ruch do cofniecia
 */
 void Komputer::rollBackMove(Move move)

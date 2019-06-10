@@ -28,6 +28,7 @@ public:
 	virtual void moveUpdate(int begMov_x,int  begMov_y,int destMov_x, int destMov_y, pyList cap) {};
 	int boardCopy[8][8]; /**< plansza gry przekazana do analizy dla gracza */
 	const int size_ = 8; /**< rozmiar planszy */
+	Move bestMove;
 };
 
 #endif
