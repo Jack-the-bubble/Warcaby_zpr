@@ -1,5 +1,7 @@
 '''
-@
+\brief plik z funkcjami zarzadzajacymi zdarzeniami
+\author Marcin Skrzypkowski
+\date 2019
 '''
 
 from flask_socketio import SocketIO, send, emit
@@ -8,18 +10,27 @@ import engine
 k = engine.Gra()
 
 '''
-funkcja tworzy 
+funkcja tworzy nowy obiekt gry gdy podlaczy sie nowy klient 
+@:param id - identyfikator konkretnego klienta
 '''
 def initialize_player(id):
     print("creating new game")
     global k
     k = engine.Gra()
 
-#delete a player that lost connection
+'''
+usun gracza po utraceniu z nim polaczenia
+@:param player - numer gracza do usuniecia
+'''
 def delete_player(player_):
     print("deleting player")
 
-
+'''
+glowna funkcja gry, pobiera dane o ruchu klienta, przekazuje je do logiki i wysyla 
+odpowiedz komputera
+@:param data - dane o wykonanym przez klienta ruchu
+@:param id - identyfikator klienta
+'''
 def handle_move(data, id):
     global k
     begMov = data['begMov']
@@ -33,6 +44,14 @@ def handle_move(data, id):
     #send computer response
     emit('moveResp', move)
 
+
+'''
+funkcja przeksztalca wspolrzedne z notacji logiki serwera na notacje planszy klienta
+@:param data - dane o ruchu do przetworzenia: 
+    pierwsze dwie wartosci - punkt poczatkowy
+    kolejne dwie wartosci - punkt koncowy ruchu pionka
+    kolejne pary - wspolrzedne pionow do zbicia
+'''
 def transform(data):
     px = []
     py = []
