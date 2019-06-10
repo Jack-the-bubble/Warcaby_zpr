@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['pionkibiale',['pionkiBiale',['../class_plansza.html#a354bb5c9825cf2bb7e9bdfe10967dd82',1,'Plansza']]],
+  ['pionkiczarne',['pionkiCzarne',['../class_plansza.html#a54fb7f5ab6371d82091f1009e8e93e7f',1,'Plansza']]],
+  ['plansza',['Plansza',['../class_plansza.html',1,'Plansza'],['../class_plansza.html#ae58ab9e9e0a12c39f36750a0faa2c100',1,'Plansza::Plansza()'],['../class_gra.html#a0c1124507712b355cdb96c9daf743121',1,'Gra::plansza()'],['../class_plansza.html#ab9e82f2e7d65fbee6e034740328d41e3',1,'Plansza::plansza()']]],
+  ['plansza_2ecpp',['Plansza.cpp',['../_plansza_8cpp.html',1,'']]],
+  ['plansza_2eh',['Plansza.h',['../_plansza_8h.html',1,'']]],
+  ['play',['play',['../class_gra.html#af41b02740d95198912403f6ab8a5650f',1,'Gra']]],
+  ['player1',['player1',['../class_gra.html#adaff0a0ab64238eda98f738a492d7001',1,'Gra']]],
+  ['player1notify',['player1notify',['../class_gra.html#a4bf557d52c4178453aafab41938a683b',1,'Gra']]],
+  ['player2',['player2',['../class_gra.html#a876b2db5915b3ac4b76f8ff1f65e8621',1,'Gra']]],
+  ['player2notify',['player2notify',['../class_gra.html#a95a018fd557be02f4f99714b78ee12a4',1,'Gra']]],
+  ['polygon',['polygon',['../classpolygon.html',1,'polygon'],['../classpolygon.html#ad496f195689f7d6f47115f05adc4a145',1,'polygon::polygon()']]],
+  ['polygon_5fwrap',['polygon_wrap',['../structpolygon__wrap.html',1,'polygon_wrap'],['../structpolygon__wrap.html#a2a84596efb19da407cf91fef23bede23',1,'polygon_wrap::polygon_wrap()']]],
+  ['possiblemoves',['possibleMoves',['../class_komputer.html#aad909db3656d1944ebd4d78ea036648f',1,'Komputer']]],
+  ['printmove',['printMove',['../class_move.html#aaa937a3f4a5f44cbe96a9853ae9d1027',1,'Move']]],
+  ['pylist',['pyList',['../_gra_8h.html#a6625b73384fedc95c0211b86fd94d30e',1,'pyList():&#160;Gra.h'],['../_gracz_8h.html#a6625b73384fedc95c0211b86fd94d30e',1,'pyList():&#160;Gracz.h'],['../_klient_8h.html#a6625b73384fedc95c0211b86fd94d30e',1,'pyList():&#160;Klient.h']]],
+  ['python_5ftest_2ecpp',['python_test.cpp',['../python__test_8cpp.html',1,'']]]
+];

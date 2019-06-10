@@ -33,9 +33,9 @@ void Komputer::update(const int plansza[8][8])
 	oponentCnt = 0;
 
 
-	for (int i = 0; i < size_; ++i)
+	for (int i = 0; i < KOLUMNY; ++i)
 	{
-		for (int j = 0; j < size_; ++j)
+		for (int j = 0; j < KOLUMNY; ++j)
 		{
 			boardCopy[i][j] = plansza[i][j];
 
@@ -100,9 +100,9 @@ int Komputer::alfabetaFirst(int depth, int alpha, int beta)
 	int pos = 0;
 	int nextColumn[12];
 	int nextRow[12];
-	for (int i = 0; i < size_; ++i)
+	for (int i = 0; i < KOLUMNY; ++i)
 	{
-		for (int j = 0; j < size_; ++j)
+		for (int j = 0; j < KOLUMNY; ++j)
 		{
 			k_ = j;
 			w_ = i;
@@ -182,9 +182,9 @@ int Komputer::alfabeta(int depth, int alpha, int beta, int ID)
 	int nextColumn[12];
 	int nextRow[12];
 	int pos = 0;
-	for (int i = 0; i < size_; ++i)
+	for (int i = 0; i < KOLUMNY; ++i)
 	{
-		for (int j = 0; j < size_; ++j)
+		for (int j = 0; j < KOLUMNY; ++j)
 		{
 			k_ = j;
 			w_ = i;
@@ -272,9 +272,9 @@ int Komputer::wygrana()
 {
 
 	int cnt1 = 0, cnt2 = 0;
-	for (int i = 0; i < size_; ++i)
+	for (int i = 0; i < KOLUMNY; ++i)
 	{
-		for (int j = 0; j < size_; ++j)
+		for (int j = 0; j < KOLUMNY; ++j)
 		{
 			if (graczID * boardCopy[i][j] >= 1 ) cnt1++;
 			if (graczID * boardCopy[i][j] <= -1) cnt2++;
@@ -297,7 +297,7 @@ bool Komputer::bicie(int ID, int wiersz, int kol)
 {
 
 
-	if (kol-2 >= 0 && (wiersz + ID * 2) >= 0 && (wiersz + ID * 2) < size_)
+	if (kol-2 >= 0 && (wiersz + ID * 2) >= 0 && (wiersz + ID * 2) < KOLUMNY)
 	{
 		if (boardCopy[wiersz + ID * 1][kol - 1] == -(ID))
 		{
@@ -308,7 +308,7 @@ bool Komputer::bicie(int ID, int wiersz, int kol)
 		}
 	}
 
-	if (kol+2 < size_ && (wiersz + ID * 2) >= 0 && (wiersz + ID * 2) < size_)
+	if (kol+2 < KOLUMNY && (wiersz + ID * 2) >= 0 && (wiersz + ID * 2) < KOLUMNY)
 	{
 		if (boardCopy[wiersz + ID * 1][kol + 1] == -(ID))
 		{
@@ -322,7 +322,7 @@ bool Komputer::bicie(int ID, int wiersz, int kol)
 
 
 	//bicia do tylu
-	if (kol - 2 >= 0 && (wiersz - ID * 2) >= 0 && (wiersz - ID * 2) < size_)
+	if (kol - 2 >= 0 && (wiersz - ID * 2) >= 0 && (wiersz - ID * 2) < KOLUMNY)
 	{
 		if (boardCopy[wiersz - ID * 1][kol - 1] == -(ID))
 		{
@@ -333,7 +333,7 @@ bool Komputer::bicie(int ID, int wiersz, int kol)
 		}
 	}
 
-	if (kol+2 < size_ && (wiersz - ID * 2) >= 0 && (wiersz - ID * 2) < 8)
+	if (kol+2 < KOLUMNY && (wiersz - ID * 2) >= 0 && (wiersz - ID * 2) < 8)
 	{
 		if (boardCopy[wiersz - ID * 1][kol + 1] == -(ID))
 		{
@@ -362,9 +362,9 @@ bool Komputer::czyBicie(int ID )
 
 	bool pom = false;
 	//sprawdzenie czy jest przymus bicia
-	for (int i = 0; i < size_; ++i)
+	for (int i = 0; i < KOLUMNY; ++i)
 	{
-		for (int j = 0; j < size_; ++j)
+		for (int j = 0; j < KOLUMNY; ++j)
 		{
 			if(boardCopy[i][j] == ID)	pom = bicie(ID, i, j);
 			if (pom) biciePossible = true;
@@ -385,14 +385,14 @@ int Komputer::markBrd()
 {
 
 	int ocena = 0;
-	for (int i = 0; i < size_; ++i)
+	for (int i = 0; i < KOLUMNY; ++i)
 	{
-		for (int j = 0; j < size_; ++j)
+		for (int j = 0; j < KOLUMNY; ++j)
 		{
-			if (boardCopy[i][j] == graczID) ocena += waga_pionka;
-			if (boardCopy[i][j] == -graczID) ocena += -waga_pionka;
-			if (boardCopy[i][j] == 2*graczID) ocena += waga_damki;
-			if (boardCopy[i][j] == -2*graczID) ocena += -waga_damki;
+			if (boardCopy[i][j] == graczID) ocena += WAGA_PIONKA;
+			if (boardCopy[i][j] == -graczID) ocena += -WAGA_PIONKA;
+			if (boardCopy[i][j] == 2*graczID) ocena += WAGA_DAMKI;
+			if (boardCopy[i][j] == -2*graczID) ocena += -WAGA_DAMKI;
 		}
 	}
 
@@ -423,7 +423,7 @@ std::list<Move> Komputer::nextPositions(int ID, int dir, int k, int w)
 	}
 	else {
 
-		if (boardCopy[w][k] == ID && k + dir * 2 < size_ && k + dir * 2 >= 0 && w + ID * 2 >= 0 && w + ID * 2 < size_
+		if (boardCopy[w][k] == ID && k + dir * 2 < KOLUMNY && k + dir * 2 >= 0 && w + ID * 2 >= 0 && w + ID * 2 < KOLUMNY
 			&& boardCopy[w + ID * 2][k + dir * 2] == 0 && boardCopy[w + ID * 1][k + dir * 1] == -ID)    //bicie w przod
 		{
 
@@ -457,7 +457,7 @@ std::list<Move> Komputer::nextPositions(int ID, int dir, int k, int w)
 			}
 		}
 
-		if (boardCopy[w][k] == ID && k + dir * 2 < size_ && k + dir * 2 >= 0 && w - ID * 2 >= 0 && w - ID * 2 < size_
+		if (boardCopy[w][k] == ID && k + dir * 2 < KOLUMNY && k + dir * 2 >= 0 && w - ID * 2 >= 0 && w - ID * 2 < KOLUMNY
 			&& boardCopy[w - ID * 2][k + dir * 2] == 0 && boardCopy[w - ID * 1][k + dir * 1] == -ID)    //bicie w tyl
 		{
 
@@ -508,7 +508,7 @@ std::list<Move> Komputer::nextPositions(int ID, int dir, int k, int w)
 bool Komputer::czyRuchBezBicia( int ID, int dir, int k, int w)
 {
 
-	return (boardCopy[w][k] == ID && k + dir * 1 < size_ && k + dir * 1 >= 0 && boardCopy[w + ID * 1][k + dir * 1] == 0 && w + ID >= 0 && w + ID < size_);
+	return (boardCopy[w][k] == ID && k + dir * 1 < KOLUMNY && k + dir * 1 >= 0 && boardCopy[w + ID * 1][k + dir * 1] == 0 && w + ID >= 0 && w + ID < KOLUMNY);
 }
 
 /**

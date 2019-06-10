@@ -38,8 +38,8 @@ private:
 	int alfabeta(int, int, int, int);
 	int markBrd(); /**funkcja zwracajaca ocene planszy dla mini-max*/
 
-	const int waga_pionka = 50; /**wagi potrzebne do algorytmu mini-max*/
-	const int waga_damki = 150;
+	const int WAGA_PIONKA = 50; /**wagi pionka do algorytmu mini-max*/
+	const int WAGA_DAMKI = 150; /**wagi damki do algorytmu mini-max*/
 	bool czyRuchBezBicia(int ID, int dir, int k, int w);
 	std::list<Move> nextPositions(int ID, int dir, int k, int w); /**lista ruchów rozpatrywanych przez algorytm mini-max*/
 	void makeMove(Move); /**funkcja modyfikujaca plansze*/

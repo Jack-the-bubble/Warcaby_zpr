@@ -16,8 +16,8 @@ Gracz::~Gracz()
  * @param board - plansza do wydrukowania o rozmiarach 8x8
  * */
 void Gracz::drukuj(const int board[8][8]) {
-	for(int i = 7; i >= 0; i--) {
-		for (int j = 0; j < 8; ++j) {
+	for(int i = KOLUMNY - 1; i >= 0; i--) {
+		for (int j = 0; j < KOLUMNY; ++j) {
 			std::cout<<"| " << board[i][j]<<" |";
 
 		}
